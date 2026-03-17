@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { JurisAILogo } from "@/components/ui/jurisai-logo";
 import { cn } from "@/lib/utils";
 import {
   Search,
@@ -41,15 +42,13 @@ export function Sidebar({ onNavClick }: { onNavClick?: () => void }) {
       {/* Logo */}
       <div className="flex h-16 items-center border-b border-white/10 px-4">
         {!collapsed && (
-          <Link href="/app" className="flex items-center gap-1.5">
-            <span className="font-serif text-xl text-white">Juris</span>
-            <span className="h-5 w-px bg-[#C9A84C]" />
-            <span className="text-xl font-light tracking-tight text-[#C9A84C]">AI</span>
+          <Link href="/app" className="flex items-center">
+            <JurisAILogo size="sm" />
           </Link>
         )}
         {collapsed && (
-          <Link href="/app" className="mx-auto">
-            <span className="font-serif text-xl text-[#C9A84C]">J</span>
+          <Link href="/app" className="mx-auto flex items-center">
+            <JurisAILogo size="sm" collapsed />
           </Link>
         )}
       </div>

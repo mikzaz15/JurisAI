@@ -1,0 +1,9 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" fill="#0C1B2A"/>
+  <!-- Scales of justice, coordinates remapped from original to 32×32 with padding -->
+  <line x1="16" y1="8" x2="16" y2="25" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="8" y1="12" x2="24" y2="12" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="8" cy="20" r="4.5" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+  <circle cx="24" cy="17" r="4.5" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+  <circle cx="16" cy="8" r="2.2" fill="#C9A84C"/>
+</svg>

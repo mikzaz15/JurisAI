@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { JurisAILogo } from "@/components/ui/jurisai-logo";
 import {
   Scale,
   Search,
@@ -68,18 +69,6 @@ function AnimateIn({
   );
 }
 
-// ─── Logo wordmark ─────────────────────────────────────────────────────────────
-function JurisAILogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const sizes = { sm: "text-lg", md: "text-xl", lg: "text-3xl" };
-  const barSizes = { sm: "h-4", md: "h-5", lg: "h-8" };
-  return (
-    <span className={`inline-flex items-center gap-0 font-bold tracking-tight ${sizes[size]}`}>
-      <span className="font-serif text-white">Juris</span>
-      <span className={`inline-block w-px ${barSizes[size]} bg-[#C9A84C] mx-1.5 rounded-full`} />
-      <span className="font-sans text-[#C9A84C] tracking-widest text-[0.85em]">AI</span>
-    </span>
-  );
-}
 
 // ─── Citation chip ─────────────────────────────────────────────────────────────
 function CitationChip({ children }: { children: React.ReactNode }) {

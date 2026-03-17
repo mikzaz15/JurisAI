@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, DM_Serif_Display } from "next/font/google";
+import { Inter, DM_Serif_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,6 +14,12 @@ const dmSerifDisplay = DM_Serif_Display({
   variable: "--font-serif",
   subsets: ["latin"],
   weight: "400",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -48,6 +54,11 @@ export const metadata: Metadata = {
     description: "Tu copiloto legal con inteligencia artificial para el derecho mexicano.",
     images: ["/og-image.png"],
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
@@ -68,7 +79,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${inter.variable} ${dmSerifDisplay.variable} antialiased`}>
+      <body className={`${inter.variable} ${dmSerifDisplay.variable} ${plusJakartaSans.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
           {children}
           <Toaster />
