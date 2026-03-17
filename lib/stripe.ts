@@ -22,6 +22,7 @@ export const stripe = {
 } as unknown as Stripe;
 
 export const PLAN_LIMITS = {
+  FREE: { queries: 10, documents: 3, seats: 1 },
   FREE_TRIAL: { queries: 20, documents: 5, seats: 1 },
   PYME: { queries: 100, documents: 20, seats: 2 },
   BASICO: { queries: 300, documents: 50, seats: 3 },
@@ -51,6 +52,12 @@ export const STRIPE_PRICES: Record<
 };
 
 export const PLAN_DISPLAY = {
+  FREE: {
+    name: "Gratis",
+    price: { monthly: 0, annual: 0 },
+    currency: "MXN",
+    color: "slate",
+  },
   FREE_TRIAL: {
     name: "Prueba Gratuita",
     price: { monthly: 0, annual: 0 },

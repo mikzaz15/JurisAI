@@ -132,6 +132,7 @@ model Subscription {
 }
 
 enum PlanType {
+  FREE
   FREE_TRIAL
   BASICO
   PROFESIONAL

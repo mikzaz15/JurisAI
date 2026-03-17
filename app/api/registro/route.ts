@@ -75,20 +75,21 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      const trialEnd = new Date();
-      trialEnd.setDate(trialEnd.getDate() + 14);
+      const periodStart = new Date();
+      const periodEnd = new Date();
+      periodEnd.setFullYear(periodEnd.getFullYear() + 100); // Free plan never expires
 
       await tx.subscription.create({
         data: {
           orgId: org.id,
-          plan: "FREE_TRIAL",
-          status: "TRIALING",
+          plan: "FREE",
+          status: "ACTIVE",
           billingCycle: "MONTHLY",
-          queriesLimit: 50,
-          documentsLimit: 10,
-          seatsLimit: 3,
-          currentPeriodStart: new Date(),
-          currentPeriodEnd: trialEnd,
+          queriesLimit: 10,
+          documentsLimit: 3,
+          seatsLimit: 1,
+          currentPeriodStart: periodStart,
+          currentPeriodEnd: periodEnd,
         },
       });
 

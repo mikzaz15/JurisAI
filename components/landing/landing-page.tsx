@@ -187,11 +187,17 @@ interface PricingCardProps {
   ctaLink: string;
   highlighted?: boolean;
   badge?: string;
-  annual: boolean;
+  note?: string;
+  ctaVariant?: "gold-filled" | "gold-outline" | "outline";
 }
 
-function PricingCard({ name, price, priceLabel, description, features, cta, ctaLink, highlighted, badge, annual }: PricingCardProps) {
-  const displayPrice = price !== null && annual ? Math.round(price * 0.8) : price;
+function PricingCard({ name, price, priceLabel, description, features, cta, ctaLink, highlighted, badge, note, ctaVariant = "outline" }: PricingCardProps) {
+  const ctaClass =
+    ctaVariant === "gold-filled"
+      ? "bg-[#C9A84C] text-[#0C1B2A] hover:bg-[#d4ad55] shadow-md shadow-[#C9A84C]/20"
+      : ctaVariant === "gold-outline"
+      ? "border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C]/10"
+      : "border border-white/20 text-white hover:bg-white/5";
 
   return (
     <div className={`relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ${
@@ -214,17 +220,14 @@ function PricingCard({ name, price, priceLabel, description, features, cta, ctaL
         {price !== null ? (
           <div className="flex items-end gap-1">
             <span className="font-serif text-4xl font-bold text-white">
-              ${displayPrice?.toLocaleString("es-MX")}
+              ${price.toLocaleString("es-MX")}
             </span>
-            <span className="mb-1 text-sm text-white/50">MXN/mes</span>
+            {price > 0 && <span className="mb-1 text-sm text-white/50">MXN/mes</span>}
           </div>
         ) : (
           <span className="font-serif text-2xl font-bold text-white">{priceLabel}</span>
         )}
-        {annual && price !== null && (
-          <p className="mt-1 text-xs text-[#C9A84C]">20% de descuento anual</p>
-        )}
-        <p className="mt-1 text-xs text-white/40">Prueba gratis 14 días • Sin tarjeta</p>
+        {note && <p className="mt-1.5 text-xs text-white/40">{note}</p>}
       </div>
       <ul className="mb-6 flex-1 space-y-2.5">
         {features.map((f) => (
@@ -236,11 +239,7 @@ function PricingCard({ name, price, priceLabel, description, features, cta, ctaL
       </ul>
       <Link
         href={ctaLink}
-        className={`block rounded-xl py-2.5 text-center text-sm font-semibold transition-all ${
-          highlighted
-            ? "bg-[#C9A84C] text-[#0C1B2A] hover:bg-[#d4ad55] shadow-md shadow-[#C9A84C]/20"
-            : "border border-white/20 text-white hover:bg-white/5"
-        }`}
+        className={`block rounded-xl py-2.5 text-center text-sm font-semibold transition-all ${ctaClass}`}
       >
         {cta}
       </Link>
@@ -279,7 +278,6 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [annual, setAnnual] = useState(false);
   const [activeModule, setActiveModule] = useState(0);
 
   useEffect(() => {
@@ -337,39 +335,36 @@ export function LandingPage() {
 
   const pricingTiers = [
     {
-      name: "PyME",
-      price: 499,
-      description: "Para empresas y negocios con necesidades legales básicas",
-      features: ["30 consultas/mes", "5 documentos/mes", "Plantillas del sistema", "Soporte por email"],
+      name: "GRATIS",
+      price: 0,
+      description: "Para comenzar a explorar la inteligencia legal",
+      features: ["10 consultas/mes", "3 documentos/mes", "1 usuario", "Plantillas básicas"],
       cta: "Comenzar gratis",
       ctaLink: "/register",
+      note: "Sin tarjeta de crédito",
+      ctaVariant: "gold-outline" as const,
     },
     {
-      name: "Básico",
-      price: 1499,
-      description: "Para abogados independientes y consultores",
-      features: ["100 consultas/mes", "20 documentos/mes", "Todas las plantillas", "1 usuario", "Exportación DOCX/PDF", "Soporte prioritario"],
-      cta: "Comenzar gratis",
-      ctaLink: "/register",
-    },
-    {
-      name: "Profesional",
-      price: 2999,
-      description: "Para despachos medianos y equipos jurídicos",
-      features: ["500 consultas/mes", "Documentos ilimitados", "Hasta 10 usuarios", "Gestión de asuntos", "Alertas de cumplimiento", "API access", "Soporte dedicado"],
-      cta: "Comenzar gratis",
+      name: "PRO",
+      price: 899,
+      description: "Para abogados y despachos con uso intensivo",
+      features: ["Consultas ilimitadas", "Documentos ilimitados", "Todas las plantillas", "Hasta 5 usuarios", "Exportación DOCX/PDF", "Alertas de cumplimiento", "Soporte prioritario"],
+      cta: "Comenzar prueba gratis",
       ctaLink: "/register",
       highlighted: true,
       badge: "Más popular",
+      note: "14 días gratis, cancela cuando quieras",
+      ctaVariant: "gold-filled" as const,
     },
     {
-      name: "Empresa",
+      name: "EMPRESA",
       price: null,
       priceLabel: "A medida",
       description: "Para grandes despachos y áreas legales corporativas",
-      features: ["Consultas ilimitadas", "Usuarios ilimitados", "SSO empresarial", "SLA garantizado", "Integración API completa", "Onboarding dedicado", "Factura en MXN/USD"],
+      features: ["Todo en Pro", "Usuarios ilimitados", "SSO empresarial", "API completa", "SLA garantizado", "Onboarding dedicado", "Factura en MXN/USD"],
       cta: "Contactar ventas",
-      ctaLink: "/register",
+      ctaLink: "mailto:hola@jurisai.com.mx",
+      ctaVariant: "outline" as const,
     },
   ];
 
@@ -886,32 +881,13 @@ export function LandingPage() {
             <h2 className="font-serif text-3xl font-bold text-white sm:text-4xl lg:text-5xl mb-4">
               Transparente. En pesos mexicanos.
             </h2>
-            <p className="text-white/50 mb-8">Todos los planes incluyen 14 días de prueba gratis. Sin tarjeta de crédito.</p>
-
-            {/* Monthly / Annual toggle */}
-            <div className="inline-flex items-center gap-1 rounded-xl border border-white/15 bg-white/5 p-1">
-              <button
-                onClick={() => setAnnual(false)}
-                className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all ${!annual ? "bg-[#C9A84C] text-[#0C1B2A] shadow-sm" : "text-white/50 hover:text-white"}`}
-              >
-                Mensual
-              </button>
-              <button
-                onClick={() => setAnnual(true)}
-                className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${annual ? "bg-[#C9A84C] text-[#0C1B2A] shadow-sm" : "text-white/50 hover:text-white"}`}
-              >
-                Anual
-                <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${annual ? "bg-[#0C1B2A]/20 text-[#0C1B2A]" : "bg-[#C9A84C]/20 text-[#C9A84C]"}`}>
-                  -20%
-                </span>
-              </button>
-            </div>
+            <p className="text-white/50">El plan Pro incluye 14 días de prueba gratis. Sin tarjeta de crédito para el plan Gratis.</p>
           </AnimateIn>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
             {pricingTiers.map((tier, i) => (
               <AnimateIn key={tier.name} delay={i * 80}>
-                <PricingCard {...tier} annual={annual} />
+                <PricingCard {...tier} />
               </AnimateIn>
             ))}
           </div>
