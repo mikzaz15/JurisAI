@@ -188,7 +188,7 @@ export default function AnaliticaPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex h-full items-center justify-center bg-[#0C1B2A]">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C9A84C] border-t-transparent" />
       </div>
     );
@@ -199,6 +199,7 @@ export default function AnaliticaPage() {
   const totalDocs = sub?.documentsUsed ?? 0;
 
   return (
+    <div className="h-full overflow-y-auto bg-[#0C1B2A]">
     <div className="p-6 max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
@@ -487,6 +488,7 @@ export default function AnaliticaPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

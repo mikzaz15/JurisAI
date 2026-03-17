@@ -377,6 +377,7 @@ export default function CumplimientoPage() {
   const authorities = alertsData?.filters.authorities || [];
 
   return (
+    <div className="h-full overflow-y-auto bg-[#0C1B2A]">
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       {selectedAlert && (
         <AlertDetailPanel alert={selectedAlert} onClose={() => setSelectedAlert(null)} />
@@ -546,6 +547,7 @@ export default function CumplimientoPage() {
       {tab === "calendario" && (
         <CalendarView deadlines={deadlines} />
       )}
+    </div>
     </div>
   );
 }

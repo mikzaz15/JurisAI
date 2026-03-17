@@ -16,9 +16,32 @@ export default function ConfiguracionLayout({ children }: { children: React.Reac
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full overflow-hidden">
-      {/* Settings sidebar */}
-      <aside className="w-48 shrink-0 border-r border-white/10 bg-[#0C1B2A] overflow-y-auto">
+    <div className="flex h-full flex-col overflow-hidden md:flex-row">
+      {/* Mobile: horizontal scrollable tab bar */}
+      <nav className="flex shrink-0 overflow-x-auto border-b border-white/10 bg-[#0C1B2A] md:hidden">
+        {settingsNav.map((item) => {
+          const isActive = pathname.startsWith(item.href);
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap",
+                isActive
+                  ? "border-[#C9A84C] text-[#C9A84C]"
+                  : "border-transparent text-white/50 hover:text-white"
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Desktop: vertical sidebar */}
+      <aside className="hidden md:flex md:w-48 shrink-0 flex-col border-r border-white/10 bg-[#0C1B2A] overflow-y-auto">
         <div className="p-3 pt-4">
           <p className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
             Configuración

@@ -28,6 +28,8 @@ interface SessionSidebarProps {
   activeSessionId?: string;
   onNewSession: () => void;
   onDeleteSession: (id: string) => void;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 export function SessionSidebar({
@@ -35,6 +37,8 @@ export function SessionSidebar({
   activeSessionId,
   onNewSession,
   onDeleteSession,
+  mobileOpen = false,
+  onMobileClose,
 }: SessionSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [search, setSearch] = useState("");
@@ -63,7 +67,8 @@ export function SessionSidebar({
 
   if (collapsed) {
     return (
-      <div className="flex w-12 flex-col items-center border-r border-white/10 bg-[#0C1B2A] py-4">
+      // Collapsed state: only visible on desktop
+      <div className="hidden md:flex w-12 flex-col items-center border-r border-white/10 bg-[#0C1B2A] py-4">
         <button
           onClick={() => setCollapsed(false)}
           className="rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white"
@@ -83,7 +88,15 @@ export function SessionSidebar({
   }
 
   return (
-    <div className="flex w-72 shrink-0 flex-col border-r border-white/10 bg-[#0C1B2A]">
+    // On mobile: fixed overlay (z-50) shown only when mobileOpen; on desktop: always shown inline
+    <div
+      className={cn(
+        "flex w-72 shrink-0 flex-col border-r border-white/10 bg-[#0C1B2A]",
+        // Mobile: overlay behavior
+        "fixed inset-y-0 left-0 z-50 md:relative md:z-auto md:flex",
+        mobileOpen ? "flex" : "hidden md:flex"
+      )}
+    >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
         <h2 className="text-sm font-semibold text-white">Investigador</h2>
@@ -95,9 +108,18 @@ export function SessionSidebar({
           >
             <Plus className="h-4 w-4" />
           </button>
+          {/* Close on mobile */}
+          <button
+            onClick={onMobileClose}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-white/40 hover:bg-white/10 hover:text-white md:hidden"
+            title="Cerrar"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          {/* Collapse on desktop */}
           <button
             onClick={() => setCollapsed(true)}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-white/40 hover:bg-white/10 hover:text-white"
+            className="hidden md:flex h-7 w-7 items-center justify-center rounded-md text-white/40 hover:bg-white/10 hover:text-white"
             title="Colapsar"
           >
             <ChevronLeft className="h-4 w-4" />

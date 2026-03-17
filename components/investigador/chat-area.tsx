@@ -6,7 +6,7 @@ import { ChatMessage, type ChatMessageData } from "./chat-message";
 import { ChatInput } from "./chat-input";
 import { EmptyState } from "./empty-state";
 import { JurisdictionSelector } from "./jurisdiction-selector";
-import { AlertCircle, RefreshCw } from "lucide-react";
+import { AlertCircle, RefreshCw, PanelLeft } from "lucide-react";
 
 interface StreamDonePayload {
   type: "done";
@@ -26,9 +26,10 @@ interface StreamErrorPayload {
 interface ChatAreaProps {
   sessionId: string;
   initialMessages: ChatMessageData[];
+  onOpenMobileSidebar?: () => void;
 }
 
-export function ChatArea({ sessionId, initialMessages }: ChatAreaProps) {
+export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: ChatAreaProps) {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessageData[]>(initialMessages);
   const [streamingMessage, setStreamingMessage] = useState<ChatMessageData | null>(null);
@@ -185,7 +186,15 @@ export function ChatArea({ sessionId, initialMessages }: ChatAreaProps) {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* Top bar: jurisdiction + area of law */}
-      <div className="flex items-center justify-between border-b border-white/10 bg-[#0C1B2A] px-4 py-2">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-[#0C1B2A] px-4 py-2">
+        {/* Mobile sidebar toggle */}
+        <button
+          onClick={onOpenMobileSidebar}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white md:hidden"
+          aria-label="Abrir historial"
+        >
+          <PanelLeft className="h-4 w-4" />
+        </button>
         <JurisdictionSelector
           jurisdiction={jurisdiction}
           areaOfLaw={areaOfLaw}
