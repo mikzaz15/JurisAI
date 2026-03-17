@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 215 40% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 40% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 40% 10%;
+
+    --primary: 42 56% 54%;
+    --primary-foreground: 215 40% 10%;
+
+    --secondary: 215 20% 95%;
+    --secondary-foreground: 215 40% 10%;
+
+    --muted: 215 20% 95%;
+    --muted-foreground: 215 20% 45%;
+
+    --accent: 215 20% 95%;
+    --accent-foreground: 215 40% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 215 20% 88%;
+    --input: 215 20% 88%;
+    --ring: 42 56% 54%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 215 40% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 215 35% 13%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 215 35% 13%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 42 56% 54%;
+    --primary-foreground: 215 40% 10%;
+
+    --secondary: 215 30% 18%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 215 30% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 215 30% 18%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 215 30% 20%;
+    --input: 215 30% 20%;
+    --ring: 42 56% 54%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3 {
+    @apply font-serif;
+  }
+}
+
+/* Landing page hero animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}

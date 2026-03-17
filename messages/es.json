@@ -1,0 +1,511 @@
+{
+  "common": {
+    "appName": "JurisAI",
+    "tagline": "Inteligencia Legal para México",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "or": "o"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Accede a tu cuenta de JurisAI",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "abogado@despacho.com.mx",
+      "password": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión...",
+      "noAccount": "¿No tienes cuenta?",
+      "register": "Crear cuenta",
+      "continueWith": "Continuar con",
+      "google": "Google",
+      "divider": "o continúa con correo",
+      "errors": {
+        "invalidCredentials": "Correo o contraseña incorrectos",
+        "generic": "Error al iniciar sesión. Intenta de nuevo."
+      }
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "subtitle": "Empieza tu prueba gratuita de 14 días",
+      "name": "Nombre completo",
+      "namePlaceholder": "Lic. Juan Pérez García",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "juan@despacho.com.mx",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Mínimo 8 caracteres",
+      "confirmPassword": "Confirmar contraseña",
+      "orgName": "Nombre del despacho u organización",
+      "orgNamePlaceholder": "Pérez & Asociados, S.C.",
+      "orgType": "Tipo de organización",
+      "submit": "Crear cuenta",
+      "submitting": "Creando cuenta...",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "login": "Iniciar sesión",
+      "terms": "Al crear una cuenta, aceptas nuestros",
+      "termsLink": "Términos de Servicio",
+      "privacy": "y",
+      "privacyLink": "Aviso de Privacidad",
+      "orgTypes": {
+        "LAW_FIRM": "Despacho de abogados",
+        "CORPORATE": "Empresa / Legal corporativo",
+        "NOTARIA": "Notaría",
+        "SME": "PyME",
+        "INDIVIDUAL": "Abogado independiente"
+      },
+      "errors": {
+        "emailExists": "Este correo ya está registrado",
+        "passwordMismatch": "Las contraseñas no coinciden",
+        "weak_password": "La contraseña debe tener al menos 8 caracteres",
+        "generic": "Error al crear la cuenta. Intenta de nuevo."
+      }
+    }
+  },
+  "nav": {
+    "investigador": "Investigador",
+    "documentos": "Documentos",
+    "asuntos": "Asuntos",
+    "cumplimiento": "Cumplimiento",
+    "analitica": "Analítica",
+    "configuracion": "Configuración",
+    "dashboard": "Dashboard"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido a JurisAI",
+    "welcomeMessage": "Tu copiloto legal con inteligencia artificial para el derecho mexicano.",
+    "startResearch": "Iniciar investigación",
+    "createDocument": "Crear documento",
+    "viewMatters": "Ver asuntos",
+    "trialBanner": "Estás en tu período de prueba gratuita.",
+    "trialDaysLeft": "{days} días restantes",
+    "upgradeCta": "Actualizar plan",
+    "stats": {
+      "queries": "Consultas realizadas",
+      "documents": "Documentos creados",
+      "matters": "Asuntos activos",
+      "teamMembers": "Miembros del equipo"
+    },
+    "emptyState": {
+      "title": "Empieza a investigar",
+      "description": "Haz tu primera consulta legal en lenguaje natural. JurisAI buscará en códigos, leyes y jurisprudencia mexicana para darte una respuesta verificada.",
+      "cta": "Hacer mi primera consulta"
+    }
+  },
+  "profile": {
+    "title": "Perfil de usuario",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "locale": "Idioma",
+    "localeOptions": {
+      "es-MX": "Español (México)",
+      "en": "English"
+    },
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "saveChanges": "Guardar cambios",
+    "saved": "Cambios guardados correctamente"
+  },
+  "errors": {
+    "unauthorized": "No tienes permiso para acceder a esta página",
+    "notFound": "Página no encontrada",
+    "serverError": "Error del servidor. Intenta de nuevo más tarde.",
+    "subscriptionRequired": "Tu suscripción ha vencido. Actualiza tu plan para continuar.",
+    "queryLimitReached": "Has alcanzado el límite de consultas de tu plan. Actualiza para continuar.",
+    "documentLimitReached": "Has alcanzado el límite de documentos de tu plan. Actualiza para continuar."
+  },
+  "asuntos": {
+    "title": "Asuntos",
+    "newMatter": "Nuevo asunto",
+    "searchPlaceholder": "Buscar asuntos...",
+    "allStatuses": "Todos los estados",
+    "allAreas": "Todas las áreas",
+    "noMatters": "No tienes asuntos aún",
+    "noMattersDesc": "Crea tu primer asunto para organizar tu trabajo por cliente.",
+    "createFirst": "Crear primer asunto",
+    "form": {
+      "title": "Título del asunto",
+      "titlePlaceholder": "Ej. Contrato de arrendamiento - Inmueble Polanco",
+      "client": "Nombre del cliente",
+      "clientPlaceholder": "Ej. Empresa ABC S.A. de C.V.",
+      "clientRfc": "RFC del cliente",
+      "clientRfcPlaceholder": "XAXX010101000",
+      "area": "Área del derecho",
+      "jurisdiction": "Jurisdicción",
+      "status": "Estado",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Descripción del asunto...",
+      "submit": "Crear asunto",
+      "submitting": "Creando...",
+      "editSubmit": "Guardar cambios",
+      "newTitle": "Nuevo asunto",
+      "editTitle": "Editar asunto"
+    },
+    "status": {
+      "ACTIVE": "Activo",
+      "CLOSED": "Cerrado",
+      "ARCHIVED": "Archivado",
+      "ON_HOLD": "En pausa"
+    },
+    "tabs": {
+      "documents": "Documentos",
+      "research": "Investigación",
+      "notes": "Notas"
+    },
+    "documents": "documentos",
+    "sessions": "sesiones",
+    "notesPlaceholder": "Escribe tus notas aquí...",
+    "noteSaved": "Nota guardada",
+    "noDocuments": "Sin documentos en este asunto",
+    "noSessions": "Sin sesiones de investigación",
+    "newDocumentForMatter": "Nuevo documento",
+    "newResearchSession": "Nueva investigación",
+    "confirmArchive": "¿Archivar este asunto?",
+    "archiveDesc": "El asunto y sus documentos seguirán siendo accesibles en modo lectura.",
+    "archive": "Archivar"
+  },
+  "documentos": {
+    "title": "Documentos",
+    "newDocument": "Nuevo documento",
+    "searchPlaceholder": "Buscar documentos...",
+    "allTypes": "Todos los tipos",
+    "allStatuses": "Todos los estados",
+    "allMatters": "Todos los asuntos",
+    "noDocuments": "No tienes documentos aún",
+    "noDocumentsDesc": "Crea tu primer documento con IA o desde una plantilla.",
+    "createFirst": "Crear primer documento",
+    "lastModified": "Modificado",
+    "type": "Tipo",
+    "status": "Estado",
+    "matter": "Asunto",
+    "types": {
+      "CONTRACT": "Contrato",
+      "MOTION": "Escrito judicial",
+      "LEGAL_OPINION": "Opinión jurídica",
+      "LETTER": "Carta",
+      "MEMO": "Memorándum",
+      "NDA": "NDA",
+      "CORPORATE_DEED": "Acta constitutiva",
+      "POWER_OF_ATTORNEY": "Poder notarial",
+      "COMPLAINT": "Demanda",
+      "AMPARO_PETITION": "Amparo",
+      "EMPLOYMENT": "Contrato laboral",
+      "LEASE": "Arrendamiento",
+      "GENERAL": "General",
+      "REGULATORY_FILING": "Trámite regulatorio",
+      "OTHER": "Otro"
+    },
+    "statuses": {
+      "DRAFT": "Borrador",
+      "IN_REVIEW": "En revisión",
+      "APPROVED": "Aprobado",
+      "FINAL": "Final",
+      "ARCHIVED": "Archivado"
+    },
+    "wizard": {
+      "step1Title": "Elige una plantilla",
+      "step1Desc": "Selecciona una plantilla del sistema o empieza en blanco",
+      "step2Title": "Información del documento",
+      "step2Desc": "Completa los campos requeridos",
+      "blank": "Documento en blanco",
+      "blankDesc": "Empieza con un editor vacío",
+      "titleLabel": "Título del documento",
+      "titlePlaceholder": "Ej. Contrato de prestación de servicios - Cliente X",
+      "typeLabel": "Tipo de documento",
+      "matterLabel": "Vincular a asunto (opcional)",
+      "noMatter": "Sin asunto",
+      "next": "Siguiente",
+      "back": "Atrás",
+      "create": "Crear y abrir editor",
+      "creating": "Creando documento...",
+      "generateWithAI": "Generar con IA",
+      "fillVariables": "Completar variables",
+      "variables": "Variables de la plantilla"
+    }
+  },
+  "plantillas": {
+    "categories": {
+      "CIVIL": "Civil",
+      "MERCANTIL": "Mercantil",
+      "LABORAL": "Laboral",
+      "NOTARIAL": "Notarial",
+      "CONSTITUCIONAL": "Constitucional",
+      "FISCAL": "Fiscal",
+      "FAMILIAR": "Familiar",
+      "OTHER": "Otro"
+    },
+    "systemTemplate": "Plantilla del sistema",
+    "customTemplate": "Plantilla personalizada",
+    "noTemplates": "No hay plantillas disponibles",
+    "preview": "Vista previa",
+    "useTemplate": "Usar esta plantilla",
+    "variables": "Variables",
+    "required": "Requerido"
+  },
+  "redactor": {
+    "untitled": "Documento sin título",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "unsaved": "Sin guardar",
+    "lastSaved": "Guardado hace",
+    "versions": "Historial de versiones",
+    "noVersions": "Sin versiones guardadas",
+    "version": "Versión",
+    "restoreVersion": "Restaurar esta versión",
+    "restoreConfirm": "¿Restaurar esta versión?",
+    "restoreDesc": "El contenido actual se guardará como versión antes de restaurar.",
+    "restore": "Restaurar",
+    "export": "Exportar",
+    "exportDocx": "Descargar DOCX",
+    "exportPdf": "Imprimir / PDF",
+    "aiAssistant": "Asistente IA",
+    "aiInstruction": "¿Qué quieres generar o mejorar?",
+    "aiPlaceholder": "Ej. Agrega una cláusula de penalización por incumplimiento...",
+    "aiGenerate": "Generar",
+    "aiGenerating": "Generando...",
+    "aiInsert": "Insertar en documento",
+    "aiReplace": "Reemplazar selección",
+    "aiClear": "Limpiar",
+    "useSelection": "Usar texto seleccionado como contexto",
+    "toolbar": {
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "underline": "Subrayado",
+      "h1": "Encabezado 1",
+      "h2": "Encabezado 2",
+      "h3": "Encabezado 3",
+      "bulletList": "Lista de viñetas",
+      "orderedList": "Lista numerada",
+      "blockquote": "Cita",
+      "alignLeft": "Alinear izquierda",
+      "alignCenter": "Centrar",
+      "alignRight": "Alinear derecha",
+      "undo": "Deshacer",
+      "redo": "Rehacer"
+    },
+    "statusDraft": "Borrador",
+    "statusReview": "En revisión",
+    "statusFinal": "Final",
+    "linkMatter": "Vincular a asunto",
+    "noMatter": "Sin asunto",
+    "changeMatter": "Cambiar asunto"
+  },
+  "versiones": {
+    "title": "Versiones",
+    "close": "Cerrar",
+    "version": "v",
+    "restore": "Restaurar",
+    "current": "Actual",
+    "autoSaved": "Guardado automático",
+    "manualSave": "Guardado manual"
+  },
+  "facturacion": {
+    "title": "Facturación",
+    "currentPlan": "Plan actual",
+    "usage": "Uso del período",
+    "invoices": "Historial de facturas",
+    "noInvoices": "Sin facturas todavía",
+    "upgrade": "Actualizar plan",
+    "downgrade": "Cambiar plan",
+    "managePortal": "Gestionar suscripción",
+    "openPortal": "Abrir portal de pagos",
+    "cancelAtPeriodEnd": "Se cancela al final del período",
+    "renewsOn": "Se renueva el",
+    "expiresOn": "Expira el",
+    "billingCycle": {
+      "MONTHLY": "Mensual",
+      "ANNUAL": "Anual"
+    },
+    "status": {
+      "ACTIVE": "Activo",
+      "PAST_DUE": "Pago vencido",
+      "CANCELED": "Cancelado",
+      "TRIALING": "Período de prueba",
+      "PAUSED": "Pausado"
+    },
+    "plans": {
+      "FREE_TRIAL": "Prueba Gratuita",
+      "PYME": "PyME",
+      "BASICO": "Básico",
+      "PROFESIONAL": "Profesional",
+      "EMPRESA": "Empresa"
+    },
+    "limits": {
+      "queries": "Consultas IA",
+      "documents": "Documentos",
+      "seats": "Asientos"
+    },
+    "invoice": {
+      "date": "Fecha",
+      "amount": "Monto",
+      "status": "Estado",
+      "download": "Descargar",
+      "paid": "Pagado",
+      "open": "Pendiente",
+      "void": "Anulado"
+    },
+    "upgradeModal": {
+      "title": "Elige tu plan",
+      "subtitle": "Actualiza para desbloquear más consultas, documentos y asientos",
+      "monthly": "Mensual",
+      "annual": "Anual",
+      "annualDiscount": "Ahorra 17%",
+      "perMonth": "/mes",
+      "perYear": "/año",
+      "perUserMonth": "/usuario/mes",
+      "features": {
+        "PYME": ["100 consultas IA/mes", "20 documentos/mes", "1 usuario", "Soporte por correo"],
+        "BASICO": ["300 consultas IA/mes", "50 documentos/mes", "Hasta 3 usuarios", "Soporte prioritario"],
+        "PROFESIONAL": ["1,000 consultas IA/mes", "200 documentos/mes", "Hasta 10 usuarios", "Soporte dedicado"]
+      },
+      "selectPlan": "Seleccionar plan",
+      "currentPlan": "Plan actual",
+      "contactSales": "Contactar ventas"
+    },
+    "limitReached": {
+      "queries": "Has alcanzado el límite de consultas de tu plan",
+      "documents": "Has alcanzado el límite de documentos de tu plan",
+      "seats": "Has alcanzado el límite de asientos de tu plan",
+      "cta": "Actualizar plan"
+    }
+  },
+  "equipo": {
+    "title": "Equipo",
+    "invite": "Invitar miembro",
+    "inviteEmail": "Correo electrónico",
+    "inviteEmailPlaceholder": "abogado@despacho.com.mx",
+    "inviteRole": "Rol",
+    "inviteSubmit": "Enviar invitación",
+    "inviting": "Enviando...",
+    "inviteSent": "Invitación enviada a {email}",
+    "pendingInvites": "Invitaciones pendientes",
+    "noMembers": "No hay miembros todavía",
+    "seats": "{used} de {limit} asientos usados",
+    "seatsLimitReached": "Límite de asientos alcanzado",
+    "removeConfirm": "¿Eliminar a {name} del equipo?",
+    "removeDesc": "Esta acción no se puede deshacer. El usuario perderá acceso a la organización.",
+    "removeMember": "Eliminar miembro",
+    "cancelInvite": "Cancelar invitación",
+    "roles": {
+      "OWNER": "Propietario",
+      "ADMIN": "Administrador",
+      "LAWYER": "Abogado",
+      "PARALEGAL": "Paralegal",
+      "VIEWER": "Observador"
+    },
+    "joined": "Se unió",
+    "expires": "Expira",
+    "pending": "Pendiente"
+  },
+  "analitica": {
+    "title": "Analítica",
+    "period": "Período",
+    "periods": {
+      "7d": "Últimos 7 días",
+      "30d": "Últimos 30 días",
+      "90d": "Últimos 90 días"
+    },
+    "overview": {
+      "totalQueries": "Consultas totales",
+      "docsGenerated": "Documentos generados",
+      "activeMatters": "Asuntos activos",
+      "activeMembers": "Miembros activos"
+    },
+    "charts": {
+      "queryVolume": "Volumen de consultas",
+      "byAreaOfLaw": "Consultas por área del derecho",
+      "docTypes": "Tipos de documentos",
+      "teamActivity": "Actividad del equipo"
+    },
+    "table": {
+      "member": "Miembro",
+      "role": "Rol",
+      "queries": "Consultas",
+      "documents": "Documentos",
+      "lastActive": "Última actividad",
+      "never": "Nunca"
+    },
+    "usage": {
+      "title": "Uso del plan",
+      "of": "de",
+      "unlimited": "Ilimitado"
+    },
+    "exportCsv": "Exportar CSV",
+    "noData": "Sin datos para el período seleccionado"
+  },
+  "cumplimiento": {
+    "title": "Cumplimiento",
+    "alertFeed": "Alertas regulatorias",
+    "calendar": "Calendario",
+    "filters": {
+      "all": "Todos",
+      "authority": "Autoridad",
+      "area": "Área",
+      "impact": "Impacto",
+      "dateRange": "Período"
+    },
+    "impact": {
+      "LOW": "Bajo",
+      "MEDIUM": "Medio",
+      "HIGH": "Alto",
+      "CRITICAL": "Crítico"
+    },
+    "authorities": {
+      "SAT": "SAT",
+      "IMSS": "IMSS",
+      "COFEPRIS": "COFEPRIS",
+      "CNBV": "CNBV",
+      "STPS": "STPS",
+      "SE": "SE",
+      "DOF": "DOF"
+    },
+    "alertCard": {
+      "source": "Fuente",
+      "dofRef": "DOF",
+      "publishedAt": "Publicado",
+      "viewDetail": "Ver detalle",
+      "analyzeImpact": "Analizar impacto"
+    },
+    "detail": {
+      "title": "Detalle de alerta",
+      "summary": "Resumen",
+      "originalSource": "Fuente original",
+      "impactAnalysis": "Análisis de impacto",
+      "affectedMatters": "Asuntos afectados",
+      "noAffectedMatters": "Ningún asunto activo parece verse afectado por esta alerta",
+      "analyzingImpact": "Analizando impacto..."
+    },
+    "calendar": {
+      "title": "Próximos vencimientos",
+      "noDeadlines": "Sin vencimientos en los próximos 90 días",
+      "recurrence": {
+        "monthly": "Mensual",
+        "annual": "Anual",
+        "quarterly": "Trimestral",
+        "one-time": "Única vez"
+      },
+      "daysLeft": "{days} días",
+      "today": "Hoy",
+      "overdue": "Vencido"
+    },
+    "noAlerts": "Sin alertas regulatorias",
+    "noAlertsDesc": "No hay alertas para los filtros seleccionados"
+  }
+}

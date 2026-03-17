@@ -1,0 +1,511 @@
+{
+  "common": {
+    "appName": "JurisAI",
+    "tagline": "Legal Intelligence for Mexico",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "confirm": "Confirm",
+    "close": "Close",
+    "or": "or"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your JurisAI account",
+      "email": "Email address",
+      "emailPlaceholder": "lawyer@firm.com.mx",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "Forgot your password?",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "register": "Create account",
+      "continueWith": "Continue with",
+      "google": "Google",
+      "divider": "or continue with email",
+      "errors": {
+        "invalidCredentials": "Invalid email or password",
+        "generic": "Sign in failed. Please try again."
+      }
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Start your 14-day free trial",
+      "name": "Full name",
+      "namePlaceholder": "Juan Pérez García",
+      "email": "Email address",
+      "emailPlaceholder": "juan@firm.com.mx",
+      "password": "Password",
+      "passwordPlaceholder": "Minimum 8 characters",
+      "confirmPassword": "Confirm password",
+      "orgName": "Organization name",
+      "orgNamePlaceholder": "Pérez & Associates",
+      "orgType": "Organization type",
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "haveAccount": "Already have an account?",
+      "login": "Sign in",
+      "terms": "By creating an account, you agree to our",
+      "termsLink": "Terms of Service",
+      "privacy": "and",
+      "privacyLink": "Privacy Policy",
+      "orgTypes": {
+        "LAW_FIRM": "Law firm",
+        "CORPORATE": "Corporation / Corporate legal",
+        "NOTARIA": "Notary office",
+        "SME": "Small business",
+        "INDIVIDUAL": "Independent lawyer"
+      },
+      "errors": {
+        "emailExists": "This email is already registered",
+        "passwordMismatch": "Passwords do not match",
+        "weak_password": "Password must be at least 8 characters",
+        "generic": "Failed to create account. Please try again."
+      }
+    }
+  },
+  "nav": {
+    "investigador": "Researcher",
+    "documentos": "Documents",
+    "asuntos": "Matters",
+    "cumplimiento": "Compliance",
+    "analitica": "Analytics",
+    "configuracion": "Settings",
+    "dashboard": "Dashboard"
+  },
+  "dashboard": {
+    "welcome": "Welcome to JurisAI",
+    "welcomeMessage": "Your AI-powered legal copilot for Mexican law.",
+    "startResearch": "Start researching",
+    "createDocument": "Create document",
+    "viewMatters": "View matters",
+    "trialBanner": "You are on your free trial.",
+    "trialDaysLeft": "{days} days remaining",
+    "upgradeCta": "Upgrade plan",
+    "stats": {
+      "queries": "Queries made",
+      "documents": "Documents created",
+      "matters": "Active matters",
+      "teamMembers": "Team members"
+    },
+    "emptyState": {
+      "title": "Start researching",
+      "description": "Ask your first legal question in natural language. JurisAI will search across Mexican codes, laws, and jurisprudence to give you a verified answer.",
+      "cta": "Make my first query"
+    }
+  },
+  "profile": {
+    "title": "User profile",
+    "name": "Name",
+    "email": "Email address",
+    "locale": "Language",
+    "localeOptions": {
+      "es-MX": "Español (México)",
+      "en": "English"
+    },
+    "changePassword": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "saveChanges": "Save changes",
+    "saved": "Changes saved successfully"
+  },
+  "errors": {
+    "unauthorized": "You don't have permission to access this page",
+    "notFound": "Page not found",
+    "serverError": "Server error. Please try again later.",
+    "subscriptionRequired": "Your subscription has expired. Upgrade your plan to continue.",
+    "queryLimitReached": "You've reached your plan's query limit. Upgrade to continue.",
+    "documentLimitReached": "You've reached your plan's document limit. Upgrade to continue."
+  },
+  "asuntos": {
+    "title": "Matters",
+    "newMatter": "New matter",
+    "searchPlaceholder": "Search matters...",
+    "allStatuses": "All statuses",
+    "allAreas": "All areas",
+    "noMatters": "No matters yet",
+    "noMattersDesc": "Create your first matter to organize your work by client.",
+    "createFirst": "Create first matter",
+    "form": {
+      "title": "Matter title",
+      "titlePlaceholder": "E.g. Lease agreement - Polanco property",
+      "client": "Client name",
+      "clientPlaceholder": "E.g. ABC Corp S.A. de C.V.",
+      "clientRfc": "Client RFC",
+      "clientRfcPlaceholder": "XAXX010101000",
+      "area": "Area of law",
+      "jurisdiction": "Jurisdiction",
+      "status": "Status",
+      "description": "Description",
+      "descriptionPlaceholder": "Matter description...",
+      "submit": "Create matter",
+      "submitting": "Creating...",
+      "editSubmit": "Save changes",
+      "newTitle": "New matter",
+      "editTitle": "Edit matter"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "CLOSED": "Closed",
+      "ARCHIVED": "Archived",
+      "ON_HOLD": "On hold"
+    },
+    "tabs": {
+      "documents": "Documents",
+      "research": "Research",
+      "notes": "Notes"
+    },
+    "documents": "documents",
+    "sessions": "sessions",
+    "notesPlaceholder": "Write your notes here...",
+    "noteSaved": "Note saved",
+    "noDocuments": "No documents in this matter",
+    "noSessions": "No research sessions",
+    "newDocumentForMatter": "New document",
+    "newResearchSession": "New research",
+    "confirmArchive": "Archive this matter?",
+    "archiveDesc": "The matter and its documents will remain accessible in read-only mode.",
+    "archive": "Archive"
+  },
+  "documentos": {
+    "title": "Documents",
+    "newDocument": "New document",
+    "searchPlaceholder": "Search documents...",
+    "allTypes": "All types",
+    "allStatuses": "All statuses",
+    "allMatters": "All matters",
+    "noDocuments": "No documents yet",
+    "noDocumentsDesc": "Create your first document with AI or from a template.",
+    "createFirst": "Create first document",
+    "lastModified": "Modified",
+    "type": "Type",
+    "status": "Status",
+    "matter": "Matter",
+    "types": {
+      "CONTRACT": "Contract",
+      "MOTION": "Court filing",
+      "LEGAL_OPINION": "Legal opinion",
+      "LETTER": "Letter",
+      "MEMO": "Memo",
+      "NDA": "NDA",
+      "CORPORATE_DEED": "Corporate deed",
+      "POWER_OF_ATTORNEY": "Power of attorney",
+      "COMPLAINT": "Complaint",
+      "AMPARO_PETITION": "Amparo petition",
+      "EMPLOYMENT": "Employment contract",
+      "LEASE": "Lease",
+      "GENERAL": "General",
+      "REGULATORY_FILING": "Regulatory filing",
+      "OTHER": "Other"
+    },
+    "statuses": {
+      "DRAFT": "Draft",
+      "IN_REVIEW": "In review",
+      "APPROVED": "Approved",
+      "FINAL": "Final",
+      "ARCHIVED": "Archived"
+    },
+    "wizard": {
+      "step1Title": "Choose a template",
+      "step1Desc": "Select a system template or start blank",
+      "step2Title": "Document information",
+      "step2Desc": "Fill in the required fields",
+      "blank": "Blank document",
+      "blankDesc": "Start with an empty editor",
+      "titleLabel": "Document title",
+      "titlePlaceholder": "E.g. Service agreement - Client X",
+      "typeLabel": "Document type",
+      "matterLabel": "Link to matter (optional)",
+      "noMatter": "No matter",
+      "next": "Next",
+      "back": "Back",
+      "create": "Create and open editor",
+      "creating": "Creating document...",
+      "generateWithAI": "Generate with AI",
+      "fillVariables": "Fill variables",
+      "variables": "Template variables"
+    }
+  },
+  "plantillas": {
+    "categories": {
+      "CIVIL": "Civil",
+      "MERCANTIL": "Commercial",
+      "LABORAL": "Labor",
+      "NOTARIAL": "Notarial",
+      "CONSTITUCIONAL": "Constitutional",
+      "FISCAL": "Tax",
+      "FAMILIAR": "Family",
+      "OTHER": "Other"
+    },
+    "systemTemplate": "System template",
+    "customTemplate": "Custom template",
+    "noTemplates": "No templates available",
+    "preview": "Preview",
+    "useTemplate": "Use this template",
+    "variables": "Variables",
+    "required": "Required"
+  },
+  "redactor": {
+    "untitled": "Untitled document",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "unsaved": "Unsaved",
+    "lastSaved": "Saved",
+    "versions": "Version history",
+    "noVersions": "No saved versions",
+    "version": "Version",
+    "restoreVersion": "Restore this version",
+    "restoreConfirm": "Restore this version?",
+    "restoreDesc": "Current content will be saved as a version before restoring.",
+    "restore": "Restore",
+    "export": "Export",
+    "exportDocx": "Download DOCX",
+    "exportPdf": "Print / PDF",
+    "aiAssistant": "AI Assistant",
+    "aiInstruction": "What do you want to generate or improve?",
+    "aiPlaceholder": "E.g. Add a penalty clause for breach of contract...",
+    "aiGenerate": "Generate",
+    "aiGenerating": "Generating...",
+    "aiInsert": "Insert into document",
+    "aiReplace": "Replace selection",
+    "aiClear": "Clear",
+    "useSelection": "Use selected text as context",
+    "toolbar": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "h1": "Heading 1",
+      "h2": "Heading 2",
+      "h3": "Heading 3",
+      "bulletList": "Bullet list",
+      "orderedList": "Ordered list",
+      "blockquote": "Blockquote",
+      "alignLeft": "Align left",
+      "alignCenter": "Center",
+      "alignRight": "Align right",
+      "undo": "Undo",
+      "redo": "Redo"
+    },
+    "statusDraft": "Draft",
+    "statusReview": "In review",
+    "statusFinal": "Final",
+    "linkMatter": "Link to matter",
+    "noMatter": "No matter",
+    "changeMatter": "Change matter"
+  },
+  "versiones": {
+    "title": "Versions",
+    "close": "Close",
+    "version": "v",
+    "restore": "Restore",
+    "current": "Current",
+    "autoSaved": "Auto-saved",
+    "manualSave": "Manual save"
+  },
+  "facturacion": {
+    "title": "Billing",
+    "currentPlan": "Current plan",
+    "usage": "Period usage",
+    "invoices": "Invoice history",
+    "noInvoices": "No invoices yet",
+    "upgrade": "Upgrade plan",
+    "downgrade": "Change plan",
+    "managePortal": "Manage subscription",
+    "openPortal": "Open billing portal",
+    "cancelAtPeriodEnd": "Cancels at end of period",
+    "renewsOn": "Renews on",
+    "expiresOn": "Expires on",
+    "billingCycle": {
+      "MONTHLY": "Monthly",
+      "ANNUAL": "Annual"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELED": "Canceled",
+      "TRIALING": "Free trial",
+      "PAUSED": "Paused"
+    },
+    "plans": {
+      "FREE_TRIAL": "Free Trial",
+      "PYME": "SME",
+      "BASICO": "Basic",
+      "PROFESIONAL": "Professional",
+      "EMPRESA": "Enterprise"
+    },
+    "limits": {
+      "queries": "AI Queries",
+      "documents": "Documents",
+      "seats": "Seats"
+    },
+    "invoice": {
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "download": "Download",
+      "paid": "Paid",
+      "open": "Open",
+      "void": "Void"
+    },
+    "upgradeModal": {
+      "title": "Choose your plan",
+      "subtitle": "Upgrade to unlock more queries, documents, and seats",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "annualDiscount": "Save 17%",
+      "perMonth": "/month",
+      "perYear": "/year",
+      "perUserMonth": "/user/month",
+      "features": {
+        "PYME": ["100 AI queries/month", "20 documents/month", "1 user", "Email support"],
+        "BASICO": ["300 AI queries/month", "50 documents/month", "Up to 3 users", "Priority support"],
+        "PROFESIONAL": ["1,000 AI queries/month", "200 documents/month", "Up to 10 users", "Dedicated support"]
+      },
+      "selectPlan": "Select plan",
+      "currentPlan": "Current plan",
+      "contactSales": "Contact sales"
+    },
+    "limitReached": {
+      "queries": "You've reached your plan's query limit",
+      "documents": "You've reached your plan's document limit",
+      "seats": "You've reached your plan's seat limit",
+      "cta": "Upgrade plan"
+    }
+  },
+  "equipo": {
+    "title": "Team",
+    "invite": "Invite member",
+    "inviteEmail": "Email address",
+    "inviteEmailPlaceholder": "lawyer@firm.com.mx",
+    "inviteRole": "Role",
+    "inviteSubmit": "Send invitation",
+    "inviting": "Sending...",
+    "inviteSent": "Invitation sent to {email}",
+    "pendingInvites": "Pending invitations",
+    "noMembers": "No members yet",
+    "seats": "{used} of {limit} seats used",
+    "seatsLimitReached": "Seat limit reached",
+    "removeConfirm": "Remove {name} from the team?",
+    "removeDesc": "This action cannot be undone. The user will lose access to the organization.",
+    "removeMember": "Remove member",
+    "cancelInvite": "Cancel invitation",
+    "roles": {
+      "OWNER": "Owner",
+      "ADMIN": "Admin",
+      "LAWYER": "Lawyer",
+      "PARALEGAL": "Paralegal",
+      "VIEWER": "Viewer"
+    },
+    "joined": "Joined",
+    "expires": "Expires",
+    "pending": "Pending"
+  },
+  "analitica": {
+    "title": "Analytics",
+    "period": "Period",
+    "periods": {
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days"
+    },
+    "overview": {
+      "totalQueries": "Total queries",
+      "docsGenerated": "Documents generated",
+      "activeMatters": "Active matters",
+      "activeMembers": "Active members"
+    },
+    "charts": {
+      "queryVolume": "Query volume",
+      "byAreaOfLaw": "Queries by area of law",
+      "docTypes": "Document types",
+      "teamActivity": "Team activity"
+    },
+    "table": {
+      "member": "Member",
+      "role": "Role",
+      "queries": "Queries",
+      "documents": "Documents",
+      "lastActive": "Last active",
+      "never": "Never"
+    },
+    "usage": {
+      "title": "Plan usage",
+      "of": "of",
+      "unlimited": "Unlimited"
+    },
+    "exportCsv": "Export CSV",
+    "noData": "No data for the selected period"
+  },
+  "cumplimiento": {
+    "title": "Compliance",
+    "alertFeed": "Regulatory alerts",
+    "calendar": "Calendar",
+    "filters": {
+      "all": "All",
+      "authority": "Authority",
+      "area": "Area",
+      "impact": "Impact",
+      "dateRange": "Period"
+    },
+    "impact": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "CRITICAL": "Critical"
+    },
+    "authorities": {
+      "SAT": "SAT",
+      "IMSS": "IMSS",
+      "COFEPRIS": "COFEPRIS",
+      "CNBV": "CNBV",
+      "STPS": "STPS",
+      "SE": "SE",
+      "DOF": "DOF"
+    },
+    "alertCard": {
+      "source": "Source",
+      "dofRef": "DOF",
+      "publishedAt": "Published",
+      "viewDetail": "View detail",
+      "analyzeImpact": "Analyze impact"
+    },
+    "detail": {
+      "title": "Alert detail",
+      "summary": "Summary",
+      "originalSource": "Original source",
+      "impactAnalysis": "Impact analysis",
+      "affectedMatters": "Affected matters",
+      "noAffectedMatters": "No active matters appear to be affected by this alert",
+      "analyzingImpact": "Analyzing impact..."
+    },
+    "calendar": {
+      "title": "Upcoming deadlines",
+      "noDeadlines": "No deadlines in the next 90 days",
+      "recurrence": {
+        "monthly": "Monthly",
+        "annual": "Annual",
+        "quarterly": "Quarterly",
+        "one-time": "One-time"
+      },
+      "daysLeft": "{days} days",
+      "today": "Today",
+      "overdue": "Overdue"
+    },
+    "noAlerts": "No regulatory alerts",
+    "noAlertsDesc": "No alerts for the selected filters"
+  }
+}
