@@ -69,7 +69,7 @@ export default async function SessionPage({ params }: Props) {
   }));
 
   return (
-    <div className="-m-6 flex h-[calc(100vh-4rem)] overflow-hidden bg-[#09131D]">
+    <div className="flex h-full min-h-0 overflow-hidden bg-[#09131D]">
       <InvestigadorShell
         sessions={allSessions}
         activeSessionId={params.sessionId}
