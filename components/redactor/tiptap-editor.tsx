@@ -13,6 +13,7 @@ interface TiptapEditorProps {
   initialContent?: string;
   onUpdate: (content: string) => void;
   onEditorReady?: (editor: ReturnType<typeof useEditor>) => void;
+  onSelectionChange?: (selection: { from: number; to: number; empty: boolean }) => void;
   editable?: boolean;
 }
 
@@ -20,6 +21,7 @@ export function TiptapEditor({
   initialContent,
   onUpdate,
   onEditorReady,
+  onSelectionChange,
   editable = true,
 }: TiptapEditorProps) {
   const editor = useEditor({
@@ -45,6 +47,13 @@ export function TiptapEditor({
     editable,
     onUpdate({ editor }) {
       onUpdate(JSON.stringify(editor.getJSON()));
+    },
+    onSelectionUpdate({ editor }) {
+      onSelectionChange?.({
+        from: editor.state.selection.from,
+        to: editor.state.selection.to,
+        empty: editor.state.selection.empty,
+      });
     },
   });
 

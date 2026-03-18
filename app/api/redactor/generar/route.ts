@@ -16,6 +16,12 @@ const generarSchema = z.object({
   selectedText: z.string().max(5000).optional(),
 });
 
+function isExplicitFullRewriteRequest(instruction: string) {
+  return /(?:reescribe|redacta|genera|rehace|rewrite|redraft).*(?:todo|completo|entero|integral|full|entire)|(?:contrato|documento).*(?:completo|entero|integral)|full rewrite|entire document/i.test(
+    instruction
+  );
+}
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -65,10 +71,18 @@ export async function POST(req: NextRequest) {
   const docContext = doc.content
     ? tiptapToPlainText(doc.content).slice(0, 3000)
     : "";
+  const fullRewriteRequested = isExplicitFullRewriteRequest(instruction);
+
+  const modeGuidance = fullRewriteRequested
+    ? "MODO: FULL_REWRITE. El usuario pidió explícitamente una reescritura o redacción integral. Puedes devolver un borrador completo del documento solicitado."
+    : selectedText
+    ? "MODO: TARGETED_EDIT. Trata la solicitud como una edición puntual del texto seleccionado. Devuelve solo el texto de reemplazo para ese fragmento. No repitas encabezados, firmas, partes no seleccionadas ni el resto del documento."
+    : "MODO: SCOPED_INSERTION. Trata la solicitud como una inserción o mejora puntual. Devuelve solo la cláusula o bloque estrechamente solicitado. No devuelvas el contrato completo, no repitas secciones existentes, no agregues firmas, no agregues testigos y no uses placeholders entre corchetes.";
 
   let userMessage = `Documento: "${doc.title}"\n\nInstrucción: ${instruction}`;
   if (selectedText) userMessage += `\n\nTexto seleccionado:\n${selectedText}`;
   if (docContext) userMessage += `\n\nContexto del documento (primeros 3000 caracteres):\n${docContext}`;
+  userMessage += `\n\n${modeGuidance}`;
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

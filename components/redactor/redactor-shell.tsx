@@ -32,6 +32,12 @@ interface RedactorShellProps {
   document: DocumentData;
 }
 
+interface SelectionRange {
+  from: number;
+  to: number;
+  empty: boolean;
+}
+
 const AUTOSAVE_DELAY = 2000;
 const VERSION_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -44,6 +50,7 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
   const [saveState, setSaveState] = useState<SaveState>("saved");
   const [aiPanelOpen, setAiPanelOpen] = useState(true);
   const [versionPanelOpen, setVersionPanelOpen] = useState(false);
+  const [lastSelection, setLastSelection] = useState<SelectionRange | null>(null);
 
   const pendingContent = useRef<string | null>(null);
   const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -127,7 +134,7 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
   }, []);
 
   return (
-    <div className="-m-6 flex h-[calc(100vh-4rem)] flex-col overflow-hidden">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
       {/* Document header row */}
       <DocumentHeader
         title={title}
@@ -171,6 +178,7 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
               initialContent={doc.content ?? undefined}
               onUpdate={handleContentUpdate}
               onEditorReady={setEditor}
+              onSelectionChange={setLastSelection}
             />
           </div>
         </div>
@@ -178,7 +186,11 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
         {/* AI Assistant panel */}
         {aiPanelOpen && (
           <div className="w-80 shrink-0">
-            <AiAssistantPanel documentId={doc.id} editor={editor} />
+            <AiAssistantPanel
+              documentId={doc.id}
+              editor={editor}
+              lastSelection={lastSelection}
+            />
           </div>
         )}
 
