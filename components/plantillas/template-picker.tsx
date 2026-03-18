@@ -27,6 +27,22 @@ interface TemplatePickerProps {
   onSelect: (template: Template | null) => void;
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  CONTRACT: "Contratos",
+  AMPARO_PETITION: "Amparo",
+  CORPORATE_DEED: "Actas constitutivas",
+  POWER_OF_ATTORNEY: "Poderes notariales",
+  LEGAL_OPINION: "Opiniones jurídicas",
+  MEMO: "Memorandos",
+  COMPLAINT: "Demandas",
+  MOTION: "Escritos judiciales",
+  REGULATORY_FILING: "Trámites regulatorios",
+  NDA: "Convenios de confidencialidad",
+  EMPLOYMENT: "Contratos laborales",
+  LEASE: "Arrendamiento",
+  GENERAL: "General",
+};
+
 export function TemplatePicker({ templates, selected, onSelect }: TemplatePickerProps) {
   const t = useTranslations("documentos.wizard");
   const tp = useTranslations("plantillas");
@@ -63,7 +79,7 @@ export function TemplatePicker({ templates, selected, onSelect }: TemplatePicker
       {Object.entries(grouped).map(([category, items]) => (
         <div key={category}>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
-            {category.replace(/_/g, " ")}
+            {CATEGORY_LABELS[category] ?? category.replace(/_/g, " ")}
           </h3>
           <div className="grid gap-2 sm:grid-cols-2">
             {items.map((tpl) => (
