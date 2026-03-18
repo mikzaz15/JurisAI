@@ -7,6 +7,7 @@ import { ChatInput } from "./chat-input";
 import { EmptyState } from "./empty-state";
 import { JurisdictionSelector } from "./jurisdiction-selector";
 import { AlertCircle, RefreshCw, PanelLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface StreamDonePayload {
   type: "done";
@@ -29,12 +30,20 @@ interface ChatAreaProps {
   onOpenMobileSidebar?: () => void;
 }
 
+interface ChatErrorState {
+  title: string;
+  message: string;
+  code?: string;
+  ctaLabel?: string;
+  onCta?: () => void;
+}
+
 export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: ChatAreaProps) {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessageData[]>(initialMessages);
   const [streamingMessage, setStreamingMessage] = useState<ChatMessageData | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ChatErrorState | null>(null);
   const [jurisdiction, setJurisdiction] = useState("federal");
   const [areaOfLaw, setAreaOfLaw] = useState("ALL");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -82,9 +91,18 @@ export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: Ch
 
         if (!response.ok) {
           const errJson = await response.json().catch(() => ({}));
-          throw new Error(
-            errJson?.error?.message ?? "Error al conectar con el servidor"
-          );
+          const errorCode = errJson?.error?.code;
+          const errorMessage =
+            errJson?.error?.message ?? "Error al conectar con el servidor";
+
+          if (response.status === 429 || errorCode === "QUERY_LIMIT_REACHED") {
+            throw {
+              code: "QUERY_LIMIT_REACHED",
+              message: errorMessage,
+            };
+          }
+
+          throw new Error(errorMessage);
         }
 
         const reader = response.body!.getReader();
@@ -144,8 +162,28 @@ export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: Ch
         }
       } catch (err) {
         if ((err as Error).name === "AbortError") return;
-        const msg = (err as Error).message ?? "Error desconocido";
-        setError(msg);
+        const isQueryLimitError =
+          typeof err === "object" &&
+          err !== null &&
+          "code" in err &&
+          err.code === "QUERY_LIMIT_REACHED";
+
+        if (isQueryLimitError) {
+          setError({
+            title: "Límite de consultas alcanzado",
+            message:
+              "Tu consulta no se envió porque ya alcanzaste el límite de consultas de tu plan. Actualiza tu plan para seguir investigando o inténtalo más tarde cuando tu cupo se restablezca.",
+            code: "QUERY_LIMIT_REACHED",
+            ctaLabel: "Ver opciones de plan",
+            onCta: () => router.push("/app/configuracion/facturacion"),
+          });
+        } else {
+          const msg = (err as Error).message ?? "Error desconocido";
+          setError({
+            title: "Error al procesar la consulta",
+            message: msg,
+          });
+        }
         setStreamingMessage(null);
         setIsStreaming(false);
         // Remove the optimistic user message on error
@@ -183,6 +221,67 @@ export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: Ch
   const allDisplayedMessages = messages;
   const isEmpty = allDisplayedMessages.length === 0 && !streamingMessage;
 
+  const errorNotice = error ? (
+    <div
+      className={
+        error.code === "QUERY_LIMIT_REACHED"
+          ? "flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4"
+          : "flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4"
+      }
+    >
+      <AlertCircle
+        className={
+          error.code === "QUERY_LIMIT_REACHED"
+            ? "mt-0.5 h-5 w-5 shrink-0 text-amber-600"
+            : "mt-0.5 h-5 w-5 shrink-0 text-red-500"
+        }
+      />
+      <div className="flex-1">
+        <p
+          className={
+            error.code === "QUERY_LIMIT_REACHED"
+              ? "text-sm font-medium text-amber-900"
+              : "text-sm font-medium text-red-800"
+          }
+        >
+          {error.title}
+        </p>
+        <p
+          className={
+            error.code === "QUERY_LIMIT_REACHED"
+              ? "mt-0.5 text-sm text-amber-800"
+              : "mt-0.5 text-sm text-red-600"
+          }
+        >
+          {error.message}
+        </p>
+        {error.onCta && error.ctaLabel ? (
+          <div className="mt-3">
+            <Button
+              type="button"
+              size="sm"
+              className="bg-[#C9A84C] text-[#0C1B2A] hover:bg-[#b8943d]"
+              onClick={error.onCta}
+            >
+              {error.ctaLabel}
+            </Button>
+          </div>
+        ) : null}
+      </div>
+      <button
+        onClick={() => setError(null)}
+        className={
+          error.code === "QUERY_LIMIT_REACHED"
+            ? "flex items-center gap-1 rounded-md px-2 py-1 text-xs text-amber-700 hover:bg-amber-100"
+            : "flex items-center gap-1 rounded-md px-2 py-1 text-xs text-red-600 hover:bg-red-100"
+        }
+      >
+        <RefreshCw className="h-3.5 w-3.5" />
+        Cerrar
+      </button>
+    </div>
+  ) : null;
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* Top bar: jurisdiction + area of law */}
@@ -206,7 +305,14 @@ export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: Ch
       {/* Messages */}
       <div className="flex-1 overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.10),transparent_24%),linear-gradient(180deg,#f8fafc_0%,#eef2f6_100%)]">
         {isEmpty ? (
-          <EmptyState onQuerySelect={sendMessage} />
+          <div className="flex min-h-full flex-col">
+            <EmptyState onQuerySelect={sendMessage} />
+            {errorNotice ? (
+              <div className="mx-auto -mt-6 w-full max-w-3xl px-4 pb-8 md:px-8">
+                {errorNotice}
+              </div>
+            ) : null}
+          </div>
         ) : (
           <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 md:px-8 md:py-8">
             {allDisplayedMessages.map((msg) => (
@@ -225,25 +331,7 @@ export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: Ch
               />
             )}
 
-            {/* Error state */}
-            {error && (
-              <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
-                <AlertCircle className="h-5 w-5 shrink-0 text-red-500 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-red-800">
-                    Error al procesar la consulta
-                  </p>
-                  <p className="mt-0.5 text-sm text-red-600">{error}</p>
-                </div>
-                <button
-                  onClick={() => setError(null)}
-                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-red-600 hover:bg-red-100"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  Reintentar
-                </button>
-              </div>
-            )}
+            {errorNotice}
 
             <div ref={bottomRef} />
           </div>
