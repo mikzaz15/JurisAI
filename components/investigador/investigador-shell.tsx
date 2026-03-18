@@ -46,7 +46,7 @@ export function InvestigadorShell({
   );
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full w-full overflow-hidden bg-[#09131D]">
       {/* Mobile overlay */}
       {mobileSidebarOpen && (
         <div
@@ -99,18 +99,28 @@ function NoSessionState({
           <PanelLeft className="h-4 w-4" />
         </button>
       </div>
-      <div className="flex flex-1 flex-col items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h2 className="font-serif text-2xl text-gray-900">Investigador</h2>
-          <p className="mt-2 text-sm text-gray-500">
-            Selecciona una sesión o inicia una nueva consulta
-          </p>
-          <button
-            onClick={onNew}
-            className="mt-4 rounded-lg bg-[#C9A84C] px-5 py-2 text-sm font-semibold text-[#0C1B2A] hover:bg-[#b8943d] transition-colors"
-          >
-            Nueva consulta
-          </button>
+      <div className="flex flex-1 overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.14),transparent_26%),linear-gradient(180deg,#102032_0%,#0B1520_55%,#09131D_100%)] px-6 py-10 md:px-10 md:py-14">
+        <div className="m-auto w-full max-w-4xl">
+          <div className="mx-auto max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] px-8 py-10 text-center shadow-[0_32px_90px_rgba(0,0,0,0.35)] backdrop-blur-sm md:px-12 md:py-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#C9A84C]/80">
+              Espacio de investigación legal
+            </p>
+            <h2 className="mt-5 font-serif text-4xl text-white md:text-5xl">
+              Investigador
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-300 md:text-base">
+              Inicia una nueva consulta o elige una sesión previa desde el historial para seguir
+              trabajando con tu investigación legal citada.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={onNew}
+                className="rounded-xl bg-[#C9A84C] px-6 py-3 text-sm font-semibold text-[#0C1B2A] transition-colors hover:bg-[#b8943d]"
+              >
+                Nueva consulta
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

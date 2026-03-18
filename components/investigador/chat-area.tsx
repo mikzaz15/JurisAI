@@ -204,11 +204,11 @@ export function ChatArea({ sessionId, initialMessages, onOpenMobileSidebar }: Ch
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto bg-gray-50">
+      <div className="flex-1 overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.10),transparent_24%),linear-gradient(180deg,#f8fafc_0%,#eef2f6_100%)]">
         {isEmpty ? (
           <EmptyState onQuerySelect={sendMessage} />
         ) : (
-          <div className="mx-auto max-w-3xl space-y-6 px-4 py-6">
+          <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 md:px-8 md:py-8">
             {allDisplayedMessages.map((msg) => (
               <ChatMessage
                 key={msg.id}
