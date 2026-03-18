@@ -155,14 +155,17 @@ export default function FacturacionPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C9A84C] border-t-transparent" />
+      <div className="h-full overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.16),transparent_24%),linear-gradient(180deg,#102032_0%,#0B1520_55%,#09131D_100%)]">
+        <div className="flex h-64 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C9A84C] border-t-transparent" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8">
+    <div className="h-full overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.16),transparent_24%),linear-gradient(180deg,#102032_0%,#0B1520_55%,#09131D_100%)]">
+      <div className="mx-auto max-w-5xl space-y-8 px-6 py-8 md:px-8 md:py-10">
       {/* Toast */}
       {toast && (
         <div
@@ -416,6 +419,7 @@ export default function FacturacionPage() {
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }
