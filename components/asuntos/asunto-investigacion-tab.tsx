@@ -24,12 +24,13 @@ interface AsuntoInvestigacionTabProps {
 export function AsuntoInvestigacionTab({ matterId, sessions }: AsuntoInvestigacionTabProps) {
   const t = useTranslations("asuntos");
   const router = useRouter();
+  const pendingTitle = "Investigación pendiente";
 
   const handleNewSession = async () => {
     const res = await fetch("/api/investigador/sesiones", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ matterId }),
+      body: JSON.stringify({ matterId, title: pendingTitle }),
     });
     const json = await res.json();
     if (json.success) {
@@ -54,7 +55,7 @@ export function AsuntoInvestigacionTab({ matterId, sessions }: AsuntoInvestigaci
       ) : (
         <div className="divide-y divide-gray-100 rounded-xl border border-gray-200 bg-white overflow-hidden">
           {sessions.map((s) => {
-            const title = s.title ?? s.messages[0]?.content?.slice(0, 60) ?? "Sesión sin título";
+            const title = s.title ?? s.messages[0]?.content?.slice(0, 60) ?? pendingTitle;
             return (
               <Link
                 key={s.id}

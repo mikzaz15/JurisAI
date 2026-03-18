@@ -17,6 +17,8 @@ const consultaSchema = z.object({
   areaOfLaw: z.string().optional(),
 });
 
+const PENDING_SESSION_TITLE = "Investigación pendiente";
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user) {
@@ -91,7 +93,10 @@ export async function POST(req: NextRequest) {
   });
 
   // Auto-set session title from first user message
-  if (!researchSession.title && researchSession.messages.length === 0) {
+  if (
+    researchSession.messages.length === 0 &&
+    (!researchSession.title || researchSession.title === PENDING_SESSION_TITLE)
+  ) {
     await prisma.researchSession.update({
       where: { id: sessionId },
       data: { title: query.slice(0, 80) },

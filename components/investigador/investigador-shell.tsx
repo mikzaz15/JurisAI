@@ -66,6 +66,7 @@ export function InvestigadorShell({
 
       {activeSessionId ? (
         <ChatArea
+          key={activeSessionId}
           sessionId={activeSessionId}
           initialMessages={initialMessages}
           onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
