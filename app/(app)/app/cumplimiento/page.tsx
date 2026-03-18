@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   ShieldCheck,
   Calendar,
@@ -242,7 +242,100 @@ function AlertDetailPanel({
   );
 }
 
-function CalendarView({ deadlines }: { deadlines: Deadline[] }) {
+function DeadlineDetailPanel({
+  deadline,
+  onClose,
+}: {
+  deadline: Deadline;
+  onClose: () => void;
+}) {
+  const dueDate = new Date(deadline.date);
+
+  return (
+    <div className="fixed inset-0 z-50 flex">
+      <div className="flex-1 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="flex w-full max-w-lg flex-col overflow-hidden border-l border-white/10 bg-[#0C1B2A]">
+        <div className="flex items-start justify-between gap-4 border-b border-white/10 p-6">
+          <div className="min-w-0 flex-1">
+            <div className="mb-2 flex items-center gap-2 flex-wrap">
+              <AuthorityBadge authority={deadline.authority} />
+              <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs font-semibold text-slate-300">
+                {AREA_LABELS[deadline.areaOfLaw] || deadline.areaOfLaw}
+              </span>
+            </div>
+            <h2 className="text-lg font-bold leading-snug text-white">{deadline.title}</h2>
+            <p className="mt-1 text-xs text-slate-500">
+              {dueDate.toLocaleDateString("es-MX", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </div>
+          <button onClick={onClose} className="shrink-0 text-slate-400 hover:text-white">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="flex-1 space-y-6 overflow-y-auto p-6">
+          <div>
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
+              Descripción
+            </h3>
+            <p className="text-sm leading-relaxed text-slate-300">{deadline.description}</p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
+              Recurrencia
+            </h3>
+            <div className="rounded-lg border border-white/10 bg-white/3 p-3 text-sm text-slate-300">
+              {deadline.recurrence === "monthly"
+                ? "Mensual"
+                : deadline.recurrence === "annual"
+                ? "Anual"
+                : deadline.recurrence === "quarterly"
+                ? "Trimestral"
+                : "Única vez"}
+            </div>
+          </div>
+
+          {deadline.dofReference ? (
+            <div>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
+                Referencia legal
+              </h3>
+              <div className="rounded-lg border border-white/10 bg-white/3 p-3 text-sm text-slate-300">
+                {deadline.dofReference}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="rounded-xl border border-white/10 bg-white/3 p-4">
+            <div className="flex items-start gap-3">
+              <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-[#C9A84C]" />
+              <div>
+                <p className="text-sm font-medium text-white">Acción recomendada</p>
+                <p className="mt-1 text-sm leading-relaxed text-slate-400">
+                  Revisa este vencimiento con anticipación y confirma si tu organización o tus
+                  asuntos activos tienen obligaciones relacionadas con {deadline.authority}.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CalendarView({
+  deadlines,
+  onSelectDeadline,
+}: {
+  deadlines: Deadline[];
+  onSelectDeadline: (deadline: Deadline) => void;
+}) {
   const now = new Date();
 
   function getDaysLeft(dateStr: string): number {
@@ -266,10 +359,12 @@ function CalendarView({ deadlines }: { deadlines: Deadline[] }) {
         const isPast = daysLeft < 0;
 
         return (
-          <div
+          <button
+            type="button"
             key={d.id}
+            onClick={() => onSelectDeadline(d)}
             className={cn(
-              "rounded-xl border p-4 flex items-start gap-4",
+              "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-colors hover:bg-white/5",
               isPast
                 ? "border-red-500/20 bg-red-500/5"
                 : isUrgent
@@ -333,7 +428,8 @@ function CalendarView({ deadlines }: { deadlines: Deadline[] }) {
                 )}
               </div>
             </div>
-          </div>
+            <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-slate-600" />
+          </button>
         );
       })}
     </div>
@@ -346,6 +442,7 @@ export default function CumplimientoPage() {
   const [deadlines, setDeadlines] = useState<Deadline[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAlert, setSelectedAlert] = useState<RegulatoryAlert | null>(null);
+  const [selectedDeadline, setSelectedDeadline] = useState<Deadline | null>(null);
 
   // Filters
   const [authority, setAuthority] = useState("");
@@ -374,13 +471,25 @@ export default function CumplimientoPage() {
       .then((d) => { if (d.success) setDeadlines(d.data.deadlines); });
   }, []);
 
-  const authorities = alertsData?.filters.authorities || [];
+  const authorities = useMemo(
+    () =>
+      Array.from(
+        new Set([...(alertsData?.filters.authorities || []), ...deadlines.map((d) => d.authority)])
+      ).sort((a, b) => a.localeCompare(b, "es")),
+    [alertsData?.filters.authorities, deadlines]
+  );
 
   return (
     <div className="h-full overflow-y-auto bg-[#0C1B2A]">
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       {selectedAlert && (
         <AlertDetailPanel alert={selectedAlert} onClose={() => setSelectedAlert(null)} />
+      )}
+      {selectedDeadline && (
+        <DeadlineDetailPanel
+          deadline={selectedDeadline}
+          onClose={() => setSelectedDeadline(null)}
+        />
       )}
 
       {/* Header */}
@@ -545,7 +654,7 @@ export default function CumplimientoPage() {
       )}
 
       {tab === "calendario" && (
-        <CalendarView deadlines={deadlines} />
+        <CalendarView deadlines={deadlines} onSelectDeadline={setSelectedDeadline} />
       )}
     </div>
     </div>
