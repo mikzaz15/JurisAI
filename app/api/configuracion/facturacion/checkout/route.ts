@@ -5,7 +5,7 @@ import { stripe, STRIPE_PRICES, PLAN_LIMITS } from "@/lib/stripe";
 import { z } from "zod";
 
 const checkoutSchema = z.object({
-  plan: z.enum(["PYME", "BASICO", "PROFESIONAL"]),
+  plan: z.enum(["PRO"]),
   billingCycle: z.enum(["MONTHLY", "ANNUAL"]),
 });
 

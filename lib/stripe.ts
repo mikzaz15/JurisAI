@@ -23,35 +23,32 @@ export const stripe = {
 
 export const PLAN_LIMITS = {
   FREE: { queries: 10, documents: 3, seats: 1 },
-  FREE_TRIAL: { queries: 20, documents: 5, seats: 1 },
-  PYME: { queries: 100, documents: 20, seats: 2 },
-  BASICO: { queries: 300, documents: 50, seats: 3 },
-  PROFESIONAL: { queries: 1000, documents: 200, seats: 10 },
-  EMPRESA: { queries: 9999999, documents: 9999999, seats: 9999999 },
+  FREE_TRIAL: { queries: 10, documents: 3, seats: 1 },
+  PRO: { queries: 999999, documents: 999999, seats: 5 },
+  // Legacy aliases — map to PRO limits
+  PYME: { queries: 999999, documents: 999999, seats: 5 },
+  BASICO: { queries: 999999, documents: 999999, seats: 5 },
+  PROFESIONAL: { queries: 999999, documents: 999999, seats: 5 },
+  EMPRESA: { queries: 999999, documents: 999999, seats: 999999 },
 } as const;
 
 export type PlanKey = keyof typeof PLAN_LIMITS;
 
+/** Returns the canonical limits for any plan string, normalising legacy names. */
+export function getPlanLimits(plan: string): { queries: number; documents: number; seats: number } {
+  const key = plan as PlanKey;
+  return PLAN_LIMITS[key] ?? PLAN_LIMITS.FREE;
+}
+
 // Stripe price IDs from environment variables
-export const STRIPE_PRICES: Record<
-  "PYME" | "BASICO" | "PROFESIONAL",
-  { monthly: string; annual: string }
-> = {
-  PYME: {
-    monthly: process.env.STRIPE_PRICE_PYME_MONTHLY || "",
-    annual: process.env.STRIPE_PRICE_PYME_ANNUAL || "",
-  },
-  BASICO: {
-    monthly: process.env.STRIPE_PRICE_BASICO_MONTHLY || "",
-    annual: process.env.STRIPE_PRICE_BASICO_ANNUAL || "",
-  },
-  PROFESIONAL: {
+export const STRIPE_PRICES: Record<"PRO", { monthly: string; annual: string }> = {
+  PRO: {
     monthly: process.env.STRIPE_PRICE_PRO_MONTHLY || "",
     annual: process.env.STRIPE_PRICE_PRO_ANNUAL || "",
   },
 };
 
-export const PLAN_DISPLAY = {
+export const PLAN_DISPLAY: Record<string, { name: string; price: { monthly: number; annual: number }; currency: string; color: string }> = {
   FREE: {
     name: "Gratis",
     price: { monthly: 0, annual: 0 },
@@ -59,33 +56,25 @@ export const PLAN_DISPLAY = {
     color: "slate",
   },
   FREE_TRIAL: {
-    name: "Prueba Gratuita",
+    name: "Gratis",
     price: { monthly: 0, annual: 0 },
     currency: "MXN",
     color: "slate",
   },
-  PYME: {
-    name: "PyME",
-    price: { monthly: 499, annual: 4990 },
-    currency: "MXN",
-    color: "blue",
-  },
-  BASICO: {
-    name: "Básico",
-    price: { monthly: 1499, annual: 14990 },
+  PRO: {
+    name: "Pro",
+    price: { monthly: 899, annual: 8990 },
     currency: "MXN",
     color: "gold",
   },
-  PROFESIONAL: {
-    name: "Profesional",
-    price: { monthly: 2999, annual: 29990 },
-    currency: "MXN",
-    color: "navy",
-  },
+  // Legacy aliases shown with Pro branding
+  PYME: { name: "Pro", price: { monthly: 899, annual: 8990 }, currency: "MXN", color: "gold" },
+  BASICO: { name: "Pro", price: { monthly: 899, annual: 8990 }, currency: "MXN", color: "gold" },
+  PROFESIONAL: { name: "Pro", price: { monthly: 899, annual: 8990 }, currency: "MXN", color: "gold" },
   EMPRESA: {
     name: "Empresa",
     price: { monthly: 0, annual: 0 },
     currency: "MXN",
     color: "purple",
   },
-} as const;
+};

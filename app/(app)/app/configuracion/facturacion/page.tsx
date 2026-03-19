@@ -49,10 +49,9 @@ interface Invoice {
 }
 
 const PLAN_FEATURES: Record<string, string[]> = {
-  PYME: ["100 consultas IA/mes", "20 documentos/mes", "1 usuario", "Soporte por correo"],
-  BASICO: ["300 consultas IA/mes", "50 documentos/mes", "Hasta 3 usuarios", "Soporte prioritario"],
-  PROFESIONAL: ["1,000 consultas IA/mes", "200 documentos/mes", "Hasta 10 usuarios", "Soporte dedicado"],
-  EMPRESA: ["Consultas ilimitadas", "Documentos ilimitados", "Usuarios ilimitados", "SLA dedicado", "API empresarial"],
+  FREE: ["10 consultas IA/mes", "3 documentos/mes", "1 usuario"],
+  PRO: ["Consultas IA ilimitadas", "Documentos ilimitados", "Hasta 5 usuarios", "Soporte prioritario"],
+  EMPRESA: ["Todo lo de Pro", "Usuarios ilimitados", "SLA dedicado", "API empresarial", "Onboarding personalizado"],
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -107,7 +106,7 @@ export default function FacturacionPage() {
   }, []);
 
   async function handleCheckout(
-    plan: "PYME" | "BASICO" | "PROFESIONAL",
+    plan: "PRO",
     cycle: "MONTHLY" | "ANNUAL"
   ) {
     setCheckoutLoading(true);
@@ -304,24 +303,18 @@ export default function FacturacionPage() {
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {(["PYME", "BASICO", "PROFESIONAL", "EMPRESA"] as const).map((plan) => (
+              <div className="grid gap-4 sm:grid-cols-3">
+                {(["FREE", "PRO", "EMPRESA"] as const).map((plan) => (
                   <PlanCard
                     key={plan}
                     plan={plan}
-                    name={
-                      plan === "PYME"
-                        ? "PyME"
-                        : plan === "BASICO"
-                        ? "Básico"
-                        : plan === "PROFESIONAL"
-                        ? "Profesional"
-                        : "Empresa"
-                    }
-                    price={{ monthly: 0, annual: 0 }}
+                    name={plan === "FREE" ? "Gratis" : plan === "PRO" ? "Pro" : "Empresa"}
                     features={PLAN_FEATURES[plan] || []}
                     billingCycle={billingCycle}
-                    isCurrent={sub.plan === plan}
+                    isCurrent={
+                      sub.plan === plan ||
+                      (plan === "PRO" && ["PYME", "BASICO", "PROFESIONAL"].includes(sub.plan))
+                    }
                     onSelect={handleCheckout}
                     loading={checkoutLoading}
                   />

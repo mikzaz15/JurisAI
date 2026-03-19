@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, PLAN_LIMITS } from "@/lib/stripe";
+import { stripe, getPlanLimits } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import Stripe from "stripe";
 
@@ -60,12 +60,12 @@ export async function POST(req: NextRequest) {
 
 async function handleSubscriptionUpsert(stripeSub: Stripe.Subscription) {
   const orgId = stripeSub.metadata?.orgId;
-  const plan = (stripeSub.metadata?.plan || "BASICO") as keyof typeof PLAN_LIMITS;
+  const plan = (stripeSub.metadata?.plan || "PRO") as import("@prisma/client").PlanType;
   const billingCycle = stripeSub.metadata?.billingCycle || "MONTHLY";
 
   if (!orgId) return;
 
-  const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.BASICO;
+  const limits = getPlanLimits(plan);
 
   const stripeStatus = stripeSub.status;
   const subStatus =

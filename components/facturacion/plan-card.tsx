@@ -5,20 +5,18 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface PlanCardProps {
-  plan: "PYME" | "BASICO" | "PROFESIONAL" | "EMPRESA";
+  plan: "FREE" | "PRO" | "EMPRESA";
   name: string;
-  price: { monthly: number; annual: number };
   features: string[];
   billingCycle: "MONTHLY" | "ANNUAL";
   isCurrent: boolean;
-  onSelect: (plan: "PYME" | "BASICO" | "PROFESIONAL", cycle: "MONTHLY" | "ANNUAL") => void;
+  onSelect: (plan: "PRO", cycle: "MONTHLY" | "ANNUAL") => void;
   loading?: boolean;
 }
 
 const PLAN_MXN: Record<string, { monthly: number; annual: number }> = {
-  PYME: { monthly: 499, annual: 4990 },
-  BASICO: { monthly: 1499, annual: 14990 },
-  PROFESIONAL: { monthly: 2999, annual: 29990 },
+  FREE: { monthly: 0, annual: 0 },
+  PRO: { monthly: 899, annual: 8990 },
   EMPRESA: { monthly: 0, annual: 0 },
 };
 
@@ -33,19 +31,20 @@ export function PlanCard({
 }: PlanCardProps) {
   const prices = PLAN_MXN[plan];
   const monthly = billingCycle === "ANNUAL" ? Math.round(prices.annual / 12) : prices.monthly;
+  const isFree = plan === "FREE";
   const isEnterprise = plan === "EMPRESA";
 
   return (
     <div
       className={cn(
         "relative rounded-xl border p-6 flex flex-col gap-4 transition-all",
-        plan === "PROFESIONAL"
+        plan === "PRO"
           ? "border-[#C9A84C] bg-[#C9A84C]/5"
           : "border-white/10 bg-white/3",
         isCurrent && "ring-2 ring-[#C9A84C]"
       )}
     >
-      {plan === "PROFESIONAL" && (
+      {plan === "PRO" && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
           <span className="rounded-full bg-[#C9A84C] px-3 py-1 text-xs font-semibold text-[#0C1B2A]">
             Popular
@@ -55,7 +54,7 @@ export function PlanCard({
 
       <div>
         <h3 className="text-lg font-semibold text-white">{name}</h3>
-        {!isEnterprise ? (
+        {!isFree && !isEnterprise ? (
           <div className="mt-2">
             <span className="text-3xl font-bold text-white">
               ${monthly.toLocaleString()}
@@ -66,6 +65,11 @@ export function PlanCard({
                 ${prices.annual.toLocaleString()} MXN/año
               </div>
             )}
+          </div>
+        ) : isFree ? (
+          <div className="mt-2">
+            <span className="text-3xl font-bold text-white">$0</span>
+            <span className="text-slate-400 text-sm ml-1">MXN/mes</span>
           </div>
         ) : (
           <div className="mt-2 text-slate-400 text-sm">Precio a negociar</div>
@@ -93,10 +97,14 @@ export function PlanCard({
         >
           Contactar ventas
         </Button>
+      ) : isFree ? (
+        <Button variant="outline" disabled className="w-full border-white/20 text-white/50">
+          Plan actual
+        </Button>
       ) : (
         <Button
           className="w-full bg-[#C9A84C] hover:bg-[#b8943c] text-[#0C1B2A] font-semibold"
-          onClick={() => onSelect(plan as "PYME" | "BASICO" | "PROFESIONAL", billingCycle)}
+          onClick={() => onSelect("PRO", billingCycle)}
           disabled={loading}
         >
           {loading ? "Procesando..." : "Seleccionar plan"}
