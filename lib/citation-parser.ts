@@ -52,6 +52,131 @@ export interface ParsedResponse {
   citations: string[];
 }
 
+const SECTION_LABELS = {
+  conclusion: "Conclusión",
+  legalBasis: "Fundamento legal",
+  practical: "Implicaciones prácticas",
+  risks: "Riesgos o matices",
+} as const;
+
+const SECTION_ALIASES: Array<{
+  label: (typeof SECTION_LABELS)[keyof typeof SECTION_LABELS];
+  pattern: RegExp;
+}> = [
+  {
+    label: SECTION_LABELS.conclusion,
+    pattern: /^(conclusi[oó]n|respuesta breve|respuesta corta|respuesta directa|s[ií]ntesis|criterio principal)$/i,
+  },
+  {
+    label: SECTION_LABELS.legalBasis,
+    pattern: /^(fundamento legal|fundamento jur[ií]dico|base legal|marco normativo|sustento legal|sustento normativo|criterio jurisprudencial|fuentes aplicables)$/i,
+  },
+  {
+    label: SECTION_LABELS.practical,
+    pattern: /^(implicaciones pr[aá]cticas|aplicaci[oó]n pr[aá]ctica|efectos pr[aá]cticos|consideraciones pr[aá]cticas|en la pr[aá]ctica)$/i,
+  },
+  {
+    label: SECTION_LABELS.risks,
+    pattern: /^(riesgos? o matices|riesgos?|matices|advertencias|limitaciones|salvedades|puntos de atenci[oó]n|observaciones)$/i,
+  },
+];
+
+function normalizeInvestigadorContent(content: string): string {
+  const trimmed = content.trim();
+  if (!trimmed) return trimmed;
+
+  const withCanonicalHeadings = canonicalizeHeadings(trimmed);
+  if (hasStructuredSections(withCanonicalHeadings)) {
+    return withCanonicalHeadings;
+  }
+
+  const blocks = withCanonicalHeadings
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+  if (!shouldAutoStructure(withCanonicalHeadings, blocks)) {
+    return withCanonicalHeadings;
+  }
+
+  const [firstBlock, ...remainingBlocks] = blocks;
+  const foundation: string[] = [];
+  const practical: string[] = [];
+  const risks: string[] = [];
+
+  for (const block of remainingBlocks) {
+    if (looksLikeRiskBlock(block)) {
+      risks.push(block);
+    } else if (looksLikeLegalBasisBlock(block)) {
+      foundation.push(block);
+    } else {
+      practical.push(block);
+    }
+  }
+
+  const sections = [`## ${SECTION_LABELS.conclusion}\n${firstBlock}`];
+
+  if (foundation.length) {
+    sections.push(`## ${SECTION_LABELS.legalBasis}\n${foundation.join("\n\n")}`);
+  }
+  if (practical.length) {
+    sections.push(`## ${SECTION_LABELS.practical}\n${practical.join("\n\n")}`);
+  }
+  if (risks.length) {
+    sections.push(`## ${SECTION_LABELS.risks}\n${risks.join("\n\n")}`);
+  }
+
+  return sections.join("\n\n");
+}
+
+function canonicalizeHeadings(content: string): string {
+  return content
+    .split("\n")
+    .map((line) => {
+      const headingMatch = line.match(/^(#{2,3}\s+|\*\*)(.+?)(\*\*)?:?\s*$/);
+      if (!headingMatch) return line;
+
+      const rawHeading = headingMatch[2]
+        .replace(/\*\*/g, "")
+        .replace(/:+$/, "")
+        .trim();
+
+      for (const alias of SECTION_ALIASES) {
+        if (alias.pattern.test(rawHeading)) {
+          return `## ${alias.label}`;
+        }
+      }
+
+      return line;
+    })
+    .join("\n");
+}
+
+function hasStructuredSections(content: string): boolean {
+  return /(^|\n)##\s+(Conclusión|Fundamento legal|Implicaciones prácticas|Riesgos o matices)\s*$/m.test(
+    content
+  );
+}
+
+function shouldAutoStructure(content: string, blocks: string[]): boolean {
+  return blocks.length >= 2 && (content.length >= 280 || blocks.length >= 3);
+}
+
+function looksLikeLegalBasisBlock(block: string): boolean {
+  return (
+    new RegExp(CITATION_REGEX.source, "i").test(block) ||
+    /\b(art\.?|artículo|jurisprudencia|tesis|código|ley|constituci[oó]n|reglamento|nom|dof|scjn|tribunal|lft|ccf|cff|lisr|liva|lgsm)\b/i.test(
+      block
+    )
+  );
+}
+
+function looksLikeRiskBlock(block: string): boolean {
+  return /\b(riesgo|matiz|salvedad|salvo|excepto|sin embargo|advertencia|limitaci[oó]n|incertidumbre|controvertido|puede variar|depende|conflicto de criterios?)\b/i.test(
+    block
+  );
+}
+
 /**
  * Parse the full AI response into structured data.
  * Splits on the mandatory trailing "---\nCONFIANZA:" block.
@@ -67,6 +192,8 @@ export function parseAIResponse(raw: string): ParsedResponse {
     content = raw.slice(0, sepIndex).trim();
     metaBlock = raw.slice(sepIndex + separator.length).trim();
   }
+
+  content = normalizeInvestigadorContent(content);
 
   // Parse confidence
   let confidence: ParsedResponse["confidence"] = "MEDIA";
