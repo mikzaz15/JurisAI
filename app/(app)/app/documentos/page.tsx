@@ -7,7 +7,7 @@ export default async function DocumentosPage() {
   const session = await auth();
   if (!session?.user) redirect("/login");
 
-  const [documents, matters] = await Promise.all([
+  const [documents, matters, totalCount] = await Promise.all([
     prisma.document.findMany({
       where: { userId: session.user.id },
       orderBy: { updatedAt: "desc" },
@@ -21,7 +21,14 @@ export default async function DocumentosPage() {
       orderBy: { title: "asc" },
       select: { id: true, title: true },
     }),
+    prisma.document.count({ where: { userId: session.user.id } }),
   ]);
 
-  return <DocumentosShell initialDocuments={documents} matters={matters} />;
+  return (
+    <DocumentosShell
+      initialDocuments={documents}
+      matters={matters}
+      totalCount={totalCount}
+    />
+  );
 }

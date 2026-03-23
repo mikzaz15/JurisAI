@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import type { Editor } from "@tiptap/react";
-import { PanelRight, Clock } from "lucide-react";
+import { PanelRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EditorToolbar } from "./editor-toolbar";
 
@@ -14,9 +14,8 @@ const TiptapEditor = dynamic(
   { ssr: false, loading: () => <div className="flex-1 animate-pulse bg-gray-50" /> }
 );
 import { DocumentHeader } from "./document-header";
-import { VersionPanel } from "./version-panel";
 import { ExportMenu } from "./export-menu";
-import { AiAssistantPanel } from "./ai-assistant-panel";
+import { AiPanelTabs } from "./ai-panel-tabs";
 
 type SaveState = "saved" | "saving" | "unsaved";
 
@@ -49,7 +48,6 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
   const [status, setStatus] = useState(doc.status);
   const [saveState, setSaveState] = useState<SaveState>("saved");
   const [aiPanelOpen, setAiPanelOpen] = useState(true);
-  const [versionPanelOpen, setVersionPanelOpen] = useState(false);
   const [lastSelection, setLastSelection] = useState<SelectionRange | null>(null);
 
   const pendingContent = useRef<string | null>(null);
@@ -91,11 +89,8 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
   const handleContentUpdate = useCallback((content: string) => {
     pendingContent.current = content;
     setSaveState("unsaved");
-
     if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
-    autosaveTimer.current = setTimeout(() => {
-      save({ content });
-    }, AUTOSAVE_DELAY);
+    autosaveTimer.current = setTimeout(() => { save({ content }); }, AUTOSAVE_DELAY);
   }, [save]);
 
   const handleTitleChange = useCallback((newTitle: string) => {
@@ -110,9 +105,7 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
 
   const handleRestoreVersion = useCallback(async (versionId: string) => {
     if (!confirm("¿Restaurar esta versión?")) return;
-    const res = await fetch(`/api/documentos/${doc.id}/versiones/${versionId}`, {
-      method: "POST",
-    });
+    const res = await fetch(`/api/documentos/${doc.id}/versiones/${versionId}`, { method: "POST" });
     const json = await res.json();
     if (json.success && json.data.document.content && editor) {
       try {
@@ -123,14 +116,10 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
       }
       setSaveState("saved");
     }
-    setVersionPanelOpen(false);
   }, [doc.id, editor]);
 
-  // Cleanup timer on unmount
   useEffect(() => {
-    return () => {
-      if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
-    };
+    return () => { if (autosaveTimer.current) clearTimeout(autosaveTimer.current); };
   }, []);
 
   return (
@@ -147,15 +136,6 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
 
       {/* Actions row */}
       <div className="flex items-center justify-end gap-2 border-b border-gray-200 bg-white px-4 py-1.5">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setVersionPanelOpen((v) => !v)}
-          className={versionPanelOpen ? "bg-gray-100" : ""}
-        >
-          <Clock className="mr-1.5 h-3.5 w-3.5" />
-          {t("versions")}
-        </Button>
         <ExportMenu documentId={doc.id} />
         <Button
           variant="outline"
@@ -168,10 +148,13 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
         </Button>
       </div>
 
-      {/* Main editor area */}
-      <div className="flex flex-1 overflow-hidden relative">
-        {/* Editor panel */}
-        <div className="flex flex-1 flex-col overflow-hidden bg-white">
+      {/* Main editor area — 60/40 split */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Editor panel (60%) */}
+        <div
+          className="flex flex-col overflow-hidden bg-white"
+          style={{ flex: aiPanelOpen ? "3 1 0%" : "1 1 0%" }}
+        >
           <EditorToolbar editor={editor} />
           <div className="flex-1 overflow-y-auto">
             <TiptapEditor
@@ -183,24 +166,17 @@ export function RedactorShell({ document: doc }: RedactorShellProps) {
           </div>
         </div>
 
-        {/* AI Assistant panel */}
+        {/* AI panel (40%) */}
         {aiPanelOpen && (
-          <div className="w-80 shrink-0">
-            <AiAssistantPanel
+          <div className="flex flex-col overflow-hidden" style={{ flex: "2 1 0%" }}>
+            <AiPanelTabs
               documentId={doc.id}
               editor={editor}
               lastSelection={lastSelection}
+              onRestoreVersion={handleRestoreVersion}
             />
           </div>
         )}
-
-        {/* Version history panel (absolute overlay on right) */}
-        <VersionPanel
-          documentId={doc.id}
-          open={versionPanelOpen}
-          onClose={() => setVersionPanelOpen(false)}
-          onRestore={handleRestoreVersion}
-        />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
+import Anthropic from "@anthropic-ai/sdk";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -59,14 +59,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
       { success: false, error: { code: "AI_NOT_CONFIGURED" } },
       { status: 503 }
     );
   }
-
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const docContext = doc.content
     ? tiptapToPlainText(doc.content).slice(0, 3000)
@@ -84,45 +82,40 @@ export async function POST(req: NextRequest) {
   if (docContext) userMessage += `\n\nContexto del documento (primeros 3000 caracteres):\n${docContext}`;
   userMessage += `\n\n${modeGuidance}`;
 
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const encoder = new TextEncoder();
+
   const stream = new ReadableStream({
     async start(controller) {
       let fullText = "";
       try {
-        const openaiStream = await openai.chat.completions.create({
+        const anthropicStream = anthropic.messages.stream({
           model: REDACTOR_MODEL_ID,
-          messages: [
-            { role: "system", content: REDACTOR_SYSTEM_PROMPT },
-            { role: "user", content: userMessage },
-          ],
           max_tokens: REDACTOR_GENERATION_CONFIG.max_tokens,
-          temperature: REDACTOR_GENERATION_CONFIG.temperature,
-          stream: true,
+          system: REDACTOR_SYSTEM_PROMPT,
+          messages: [{ role: "user", content: userMessage }],
         });
 
-        for await (const chunk of openaiStream) {
-          const text = chunk.choices[0]?.delta?.content;
-          if (text) {
+        for await (const event of anthropicStream) {
+          if (
+            event.type === "content_block_delta" &&
+            event.delta.type === "text_delta"
+          ) {
+            const text = event.delta.text;
             fullText += text;
             controller.enqueue(
-              encoder.encode(
-                `data: ${JSON.stringify({ type: "token", text })}\n\n`
-              )
+              encoder.encode(`data: ${JSON.stringify({ type: "token", text })}\n\n`)
             );
           }
         }
 
         controller.enqueue(
-          encoder.encode(
-            `data: ${JSON.stringify({ type: "done", text: fullText })}\n\n`
-          )
+          encoder.encode(`data: ${JSON.stringify({ type: "done", text: fullText })}\n\n`)
         );
       } catch (err) {
         console.error("[redactor/generar]", err);
         controller.enqueue(
-          encoder.encode(
-            `data: ${JSON.stringify({ type: "error", message: "Error al generar" })}\n\n`
-          )
+          encoder.encode(`data: ${JSON.stringify({ type: "error", message: "Error al generar" })}\n\n`)
         );
       } finally {
         controller.close();

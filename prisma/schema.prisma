@@ -271,6 +271,7 @@ model Document {
 
   // Content
   content       String?  @db.Text
+  extractedText String?  @db.Text  // plain text extracted from uploaded file
   fileUrl       String?  // S3 URL
   fileType      String?
   fileSizeBytes Int?

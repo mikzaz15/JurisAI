@@ -69,7 +69,7 @@ STANDARD CONTRACT CLAUSES (always include):
 NOTARIAL FLAG:
 If a document type (poder notarial, compraventa inmobiliaria, acta constitutiva) requires notarial formalization, add a visible note at the top: "⚠️ NOTA: Este documento requiere formalización ante Notario Público."`;
 
-export const REDACTOR_MODEL_ID = process.env.OPENAI_MODEL ?? "gpt-4o";
+export const REDACTOR_MODEL_ID = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-5";
 
 export const REDACTOR_GENERATION_CONFIG = {
   max_tokens: 4096,

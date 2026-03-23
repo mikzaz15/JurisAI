@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { DocumentFilters } from "./document-filters";
 import { DocumentList } from "./document-list";
+import { DocumentHub } from "./document-hub";
 
 interface Document {
   id: string;
@@ -25,9 +23,10 @@ interface Matter {
 interface DocumentosShellProps {
   initialDocuments: Document[];
   matters: Matter[];
+  totalCount: number;
 }
 
-export function DocumentosShell({ initialDocuments, matters }: DocumentosShellProps) {
+export function DocumentosShell({ initialDocuments, matters, totalCount }: DocumentosShellProps) {
   const t = useTranslations("documentos");
   const [documents, setDocuments] = useState<Document[]>(initialDocuments);
   const [loading, setLoading] = useState(false);
@@ -56,32 +55,37 @@ export function DocumentosShell({ initialDocuments, matters }: DocumentosShellPr
   }, [fetchDocuments, search]);
 
   return (
-    <div className="h-full overflow-y-auto p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-serif text-2xl text-gray-900">{t("title")}</h1>
-        <Button asChild>
-          <Link href="/app/documentos/nuevo">
-            <Plus className="mr-2 h-4 w-4" />
-            {t("newDocument")}
-          </Link>
-        </Button>
-      </div>
+    <div className="h-full overflow-y-auto bg-gray-50/30">
+      <div className="mx-auto max-w-4xl px-6 py-8">
+        {/* Page header */}
+        <div className="mb-6">
+          <h1 className="font-serif text-2xl text-gray-900">{t("title")}</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Crea, sube y gestiona tus documentos legales
+          </p>
+        </div>
 
-      <div className="mb-6">
-        <DocumentFilters
-          search={search}
-          type={type}
-          status={status}
-          matterId={matterId}
-          matters={matters}
-          onSearchChange={setSearch}
-          onTypeChange={setType}
-          onStatusChange={setStatus}
-          onMatterChange={setMatterId}
-        />
-      </div>
+        {/* Hub: drop zone + action cards + section header */}
+        <DocumentHub totalCount={totalCount} />
 
-      <DocumentList documents={documents} loading={loading} />
+        {/* Filters */}
+        <div className="mb-4">
+          <DocumentFilters
+            search={search}
+            type={type}
+            status={status}
+            matterId={matterId}
+            matters={matters}
+            onSearchChange={setSearch}
+            onTypeChange={setType}
+            onStatusChange={setStatus}
+            onMatterChange={setMatterId}
+          />
+        </div>
+
+        {/* Document list */}
+        <DocumentList documents={documents} loading={loading} />
+      </div>
     </div>
   );
 }
