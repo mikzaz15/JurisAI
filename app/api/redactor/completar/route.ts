@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -47,7 +47,6 @@ export async function POST(req: NextRequest) {
 
   const { templateId, variables, matterId, title } = parsed.data;
 
-  // Load template
   const template = await prisma.template.findFirst({
     where: {
       id: templateId,
@@ -62,37 +61,32 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json(
       { success: false, error: { code: "AI_NOT_CONFIGURED" } },
       { status: 503 }
     );
   }
 
-  // Replace variables in template content
   const contentWithVars = replaceVariables(template.content, variables);
-
   const documentTitle = title ?? `${template.name} — ${new Date().toLocaleDateString("es-MX")}`;
 
-  // Call Anthropic to generate the full document
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const userMessage = `Completa y perfecciona el siguiente documento legal mexicano con las variables ya insertadas. El documento debe quedar completamente redactado y listo para uso profesional. Devuelve ÚNICAMENTE el contenido del documento en formato Markdown, sin explicaciones previas:\n\n${contentWithVars}`;
 
-  const completion = await anthropic.messages.create({
+  const completion = await openai.chat.completions.create({
     model: REDACTOR_MODEL_ID,
+    messages: [
+      { role: "system", content: REDACTOR_SYSTEM_PROMPT },
+      { role: "user", content: userMessage },
+    ],
     max_tokens: REDACTOR_GENERATION_CONFIG.max_tokens,
-    system: REDACTOR_SYSTEM_PROMPT,
-    messages: [{ role: "user", content: userMessage }],
+    temperature: REDACTOR_GENERATION_CONFIG.temperature,
   });
 
-  const generatedContent =
-    completion.content
-      .filter((b) => b.type === "text")
-      .map((b) => (b as { type: "text"; text: string }).text)
-      .join("") || contentWithVars;
+  const generatedContent = completion.choices[0]?.message?.content ?? contentWithVars;
 
-  // Wrap plain markdown in a basic TipTap JSON doc
   const tiptapContent = JSON.stringify({
     type: "doc",
     content: generatedContent.split("\n\n").map((para) => ({
@@ -101,7 +95,6 @@ export async function POST(req: NextRequest) {
     })),
   });
 
-  // Create the document
   const document = await prisma.document.create({
     data: {
       title: documentTitle,
@@ -116,7 +109,6 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Create initial version
   await prisma.documentVersion.create({
     data: {
       documentId: document.id,

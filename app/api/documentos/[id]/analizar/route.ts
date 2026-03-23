@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { tiptapToPlainText } from "@/lib/tiptap-to-text";
@@ -36,7 +36,7 @@ export async function POST(
     );
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json(
       { success: false, error: { code: "AI_NOT_CONFIGURED", message: "IA no configurada" } },
       { status: 503 }
@@ -53,7 +53,6 @@ export async function POST(
     );
   }
 
-  // Prefer extracted text (uploaded files), fall back to TipTap content
   const textCorpus =
     doc.extractedText?.trim() ||
     (doc.content ? tiptapToPlainText(doc.content) : "");
@@ -72,37 +71,33 @@ export async function POST(
     instruction ? `\n\nEnfoque especial: ${instruction}` : ""
   }`;
 
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
     async start(controller) {
+      let fullText = "";
       try {
-        const anthropicStream = anthropic.messages.stream({
+        const openaiStream = await openai.chat.completions.create({
           model: REDACTOR_MODEL_ID,
+          messages: [
+            { role: "system", content: ANALYSIS_SYSTEM_PROMPT },
+            { role: "user", content: userMessage },
+          ],
           max_tokens: 2048,
-          system: ANALYSIS_SYSTEM_PROMPT,
-          messages: [{ role: "user", content: userMessage }],
+          temperature: 0.3,
+          stream: true,
         });
 
-        for await (const event of anthropicStream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            const text = event.delta.text;
+        for await (const chunk of openaiStream) {
+          const text = chunk.choices[0]?.delta?.content;
+          if (text) {
+            fullText += text;
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ type: "token", text })}\n\n`)
             );
           }
         }
-
-        const finalMessage = await anthropicStream.finalMessage();
-        const fullText =
-          finalMessage.content
-            .filter((b) => b.type === "text")
-            .map((b) => (b as { type: "text"; text: string }).text)
-            .join("") ?? "";
 
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ type: "done", text: fullText })}\n\n`)
